@@ -1,11 +1,8 @@
-## My Project
+## AWS CDK constructs for Java
 
-TODO: Fill this README out!
+This project contains several constructs to simplify building applications with the [AWS Cloud Development Kit](https://aws.amazon.com/cdk/) in Java.
 
-Be sure to:
-
-* Change the title in this README
-* Edit your repository description on GitHub
+The [AWS Labs IoT reference architectures repository](https://github.com/aws-samples/iot-reference-architectures/) is migrating to this soon. Examples will be available there.
 
 ## Security
 
