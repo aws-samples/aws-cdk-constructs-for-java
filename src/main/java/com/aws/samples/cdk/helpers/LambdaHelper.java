@@ -37,17 +37,15 @@ public class LambdaHelper {
     }
 
     public static Role getRoleAssumedByLambda(Stack stack, String name, Optional<PolicyDocumentProps> optionalPolicyDocumentProps) {
-        // This policy refers to API Gateway but is applicable for Lambda functions that need to write logs to CloudWatch Logs
-        //   whether they're invoked by API Gateway or not
-        @NotNull IManagedPolicy apiGatewayPushToCloudWatchLogsManagedPolicy = ApiGatewayPolicies.getPushToCloudWatchLogsManagedPolicy(stack, name);
-
         Map<String, PolicyDocument> policyDocuments = new HashMap<>();
         optionalPolicyDocumentProps.ifPresent(policyDocumentProps -> policyDocuments.put("root", new PolicyDocument(policyDocumentProps)));
 
         RoleProps roleProps = RoleProps.builder()
                 .assumedBy(LambdaPolicies.LAMBDA_SERVICE_PRINCIPAL)
                 .inlinePolicies(policyDocuments)
-                .managedPolicies(Collections.singletonList(apiGatewayPushToCloudWatchLogsManagedPolicy))
+                // This policy refers to API Gateway but is applicable for Lambda functions that need to write logs to CloudWatch Logs
+                //   whether they're invoked by API Gateway or not
+                .managedPolicies(Collections.singletonList(ApiGatewayPolicies.getPushToCloudWatchLogsManagedPolicy(stack, name)))
                 .build();
 
         return new Role(stack, name + "Role", roleProps);

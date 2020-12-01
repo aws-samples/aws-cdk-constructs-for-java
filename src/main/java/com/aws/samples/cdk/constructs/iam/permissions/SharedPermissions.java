@@ -4,6 +4,9 @@ import org.jetbrains.annotations.NotNull;
 import software.amazon.awscdk.services.iam.Effect;
 import software.amazon.awscdk.services.iam.PolicyStatement;
 import software.amazon.awscdk.services.iam.PolicyStatementProps;
+import software.amazon.awssdk.services.sts.StsClient;
+
+import java.util.Optional;
 
 import static java.util.Collections.singletonList;
 
@@ -39,6 +42,8 @@ public class SharedPermissions {
     public static final String PRICING_PERMISSION_PREFIX = "pricing";
     public static final String PRICING_ALL = String.join(PERMISSION_DELIMITER, PRICING_PERMISSION_PREFIX, "*");
 
+    private static Optional<String> optionalAccountId = Optional.empty();
+
     @NotNull
     public static PolicyStatement getAllowAllPolicyStatement(String action) {
         PolicyStatementProps iotPolicyStatementProps = PolicyStatementProps.builder()
@@ -51,4 +56,12 @@ public class SharedPermissions {
     }
 
     public static IamResource allResources = () -> "*";
+
+    public static String getAccountId() {
+        if (!optionalAccountId.isPresent()) {
+            optionalAccountId = Optional.of(StsClient.create().getCallerIdentity().account());
+        }
+
+        return optionalAccountId.get();
+    }
 }

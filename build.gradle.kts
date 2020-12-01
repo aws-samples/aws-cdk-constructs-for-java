@@ -27,7 +27,7 @@ tasks.distZip { enabled = true }
 tasks.distTar { enabled = true }
 
 // Specify all of our dependency versions
-val awsCdkVersion = "1.75.0"
+val awsCdkVersion = "1.76.0"
 val vavrVersion = "0.10.3"
 val slf4jVersion = "2.0.0-alpha1"
 val jcabiVersion = "0.19.0"
@@ -40,6 +40,7 @@ val junitVersion = "4.13.1"
 val autoServiceVersion = "1.0-rc7"
 val javaPoetVersion = "1.13.0"
 val immutablesValueVersion = "2.8.9-ea-1"
+val awsLambdaJavaCoreVersion = "1.2.1"
 
 repositories {
     mavenCentral()
@@ -69,7 +70,7 @@ dependencies {
     implementation("org.slf4j:slf4j-log4j12:$slf4jVersion")
     implementation("com.jcabi:jcabi-log:$jcabiVersion")
 
-    api("software.amazon.awscdk:core:$awsCdkVersion")
+    implementation("software.amazon.awscdk:core:$awsCdkVersion")
     api("software.amazon.awscdk:iam:$awsCdkVersion")
     api("software.amazon.awscdk:sqs:$awsCdkVersion")
     api("software.amazon.awscdk:iot:$awsCdkVersion")
@@ -80,6 +81,7 @@ dependencies {
     implementation("org.apache.commons:commons-lang3:$commonsLangVersion")
     implementation("commons-io:commons-io:$commonsIoVersion")
     api("com.github.awslabs:results-iterator-for-aws-java-sdk:$resultsIteratorForAwsJavaSdkVersion")
+    implementation("com.amazonaws:aws-lambda-java-core:$awsLambdaJavaCoreVersion")
 
     testImplementation("junit:junit:$junitVersion")
 }
