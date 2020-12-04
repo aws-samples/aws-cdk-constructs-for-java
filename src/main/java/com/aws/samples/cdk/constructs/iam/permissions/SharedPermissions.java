@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import software.amazon.awscdk.services.iam.Effect;
 import software.amazon.awscdk.services.iam.PolicyStatement;
 import software.amazon.awscdk.services.iam.PolicyStatementProps;
+import software.amazon.awssdk.core.SdkSystemSetting;
 import software.amazon.awssdk.services.sts.StsClient;
 
 import java.util.Optional;
@@ -63,5 +64,9 @@ public class SharedPermissions {
         }
 
         return optionalAccountId.get();
+    }
+
+    public static boolean isRunningInLambda() {
+        return SdkSystemSetting.AWS_EXECUTION_ENV.getStringValue().isPresent();
     }
 }

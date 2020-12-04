@@ -7,7 +7,7 @@ public interface IamResource {
     String getIamString();
 
     default String getAccountId() {
-        if (SdkSystemSetting.AWS_EXECUTION_ENV.getStringValue().isPresent()) {
+        if (SharedPermissions.isRunningInLambda()) {
             // Running inside of Lambda, use actual values
             return SharedPermissions.getAccountId();
         }
@@ -17,7 +17,7 @@ public interface IamResource {
     }
 
     default String getRegion() {
-        if (SdkSystemSetting.AWS_EXECUTION_ENV.getStringValue().isPresent()) {
+        if (SharedPermissions.isRunningInLambda()) {
             // Running inside of Lambda, use actual values
             return SdkSystemSetting.AWS_REGION.getStringValueOrThrow();
         }
