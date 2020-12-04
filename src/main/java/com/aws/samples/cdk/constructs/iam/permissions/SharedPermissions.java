@@ -13,6 +13,7 @@ import static java.util.Collections.singletonList;
 
 public class SharedPermissions {
     public static final String ALL_RESOURCES = "*";
+    public static final IamResource IAM_ALL_RESOURCES = () -> ALL_RESOURCES;
     public static final String PERMISSION_DELIMITER = ":";
     private static final String DYNAMODB_PERMISSION_PREFIX = "dynamodb";
     public static final String DYNAMODB_GET_ITEM_PERMISSION = String.join(PERMISSION_DELIMITER, DYNAMODB_PERMISSION_PREFIX, "GetItem");
@@ -42,6 +43,7 @@ public class SharedPermissions {
     public static final String STS_ASSUME_ROLE = String.join(PERMISSION_DELIMITER, STS_PERMISSION_PREFIX, "AssumeRole");
     public static final String PRICING_PERMISSION_PREFIX = "pricing";
     public static final String PRICING_ALL = String.join(PERMISSION_DELIMITER, PRICING_PERMISSION_PREFIX, "*");
+    public static final String STS_GET_CALLER_IDENTITY_PERMISSION = String.join(PERMISSION_DELIMITER, STS_PERMISSION_PREFIX, "GetCallerIdentity");
 
     private static Optional<String> optionalAccountId = Optional.empty();
 
@@ -55,8 +57,6 @@ public class SharedPermissions {
 
         return new PolicyStatement(iotPolicyStatementProps);
     }
-
-    public static IamResource allResources = () -> "*";
 
     public static String getAccountId() {
         if (!optionalAccountId.isPresent()) {

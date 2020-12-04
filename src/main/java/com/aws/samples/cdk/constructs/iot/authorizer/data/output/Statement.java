@@ -11,7 +11,7 @@ public class Statement {
 
     public static Statement allowIamAction(IamAction iamAction) {
         Statement statement = new Statement();
-        statement.Action = ALLOW;
+        statement.Effect = ALLOW;
         innerSet(iamAction, statement);
 
         return statement;
@@ -19,14 +19,14 @@ public class Statement {
 
     public static Statement denyIamAction(IamAction iamAction) {
         Statement statement = new Statement();
-        statement.Action = DENY;
+        statement.Effect = DENY;
         innerSet(iamAction, statement);
 
         return statement;
     }
 
     private static void innerSet(IamAction iamAction, Statement statement) {
-        statement.Effect = iamAction.getIamString();
+        statement.Action = iamAction.getIamString();
         statement.Resource = iamAction.getIamResource().getIamString();
     }
 
