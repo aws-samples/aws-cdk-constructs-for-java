@@ -1,25 +1,38 @@
 package com.aws.samples.cdk.helpers;
 
 import com.aws.samples.cdk.constructs.iam.permissions.SharedPermissions;
+import com.aws.samples.cdk.constructs.iot.authorizer.IotCustomAuthorizer;
 import org.jetbrains.annotations.NotNull;
+import software.amazon.awscdk.core.Duration;
 import software.amazon.awscdk.core.Fn;
 import software.amazon.awscdk.core.Stack;
 import software.amazon.awscdk.services.iam.Effect;
 import software.amazon.awscdk.services.iam.PolicyStatement;
 import software.amazon.awscdk.services.iam.PolicyStatementProps;
+import software.amazon.awscdk.services.iam.Role;
 import software.amazon.awscdk.services.iot.CfnAuthorizer;
+import software.amazon.awscdk.services.iot.CfnAuthorizerProps;
 import software.amazon.awscdk.services.iot.CfnTopicRule;
-import software.amazon.awscdk.services.lambda.CfnPermission;
-import software.amazon.awscdk.services.lambda.CfnPermissionProps;
-import software.amazon.awscdk.services.lambda.Function;
+import software.amazon.awscdk.services.lambda.Runtime;
+import software.amazon.awscdk.services.lambda.*;
 
+import java.io.File;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.aws.samples.cdk.constructs.iam.permissions.SharedPermissions.*;
 import static com.aws.samples.cdk.helpers.CdkHelper.NO_SEPARATOR;
+import static com.aws.samples.cdk.helpers.LambdaHelper.getRoleAssumedByLambda;
+import static com.aws.samples.cdk.helpers.ReflectionHelper.HANDLE_REQUEST;
+import static com.aws.samples.cdk.helpers.ReflectionHelper.findClassesInJarImplementingInterface;
 import static java.util.Collections.singletonList;
 
 public class IotHelper {
+    public static final Duration DEFAULT_LAMBDA_FUNCTION_TIMEOUT = Duration.seconds(10);
     public static final String TOPIC = ":topic/";
     public static final String ALL_SUFFIX = "/*";
     public static final String TOPICFILTER = ":topicfilter/";
@@ -119,5 +132,64 @@ public class IotHelper {
                 .actions(singletonList(IOT_CONNECT_PERMISSION))
                 .build();
         return new PolicyStatement(iotPolicyStatementProps);
+    }
+
+    private static Stream<Class<IotCustomAuthorizer>> findIotCustomAuthorizersInJar(File file) {
+        return findClassesInJarImplementingInterface(file, IotCustomAuthorizer.class);
+    }
+
+    private static Function createAuthorizerFunction(Stack stack, Code code, Class<IotCustomAuthorizer> clazz) {
+        Role role = getRoleAssumedByLambda(stack, clazz.getSimpleName(), Optional.empty());
+
+        String handlerName = String.join("::", clazz.getName(), HANDLE_REQUEST);
+
+        FunctionProps functionProps = FunctionProps.builder()
+                .code(code)
+                .handler(handlerName)
+                .memorySize(1024)
+                .timeout(DEFAULT_LAMBDA_FUNCTION_TIMEOUT)
+                .runtime(Runtime.JAVA_11)
+                .role(role)
+                .functionName(String.join("-", stack.getStackName(), clazz.getSimpleName()))
+                .tracing(Tracing.ACTIVE)
+                .build();
+
+        return new Function(stack, clazz.getSimpleName(), functionProps);
+    }
+
+    private static CfnAuthorizer createIotAuthorizerFromFunction(Stack stack, Function authorizerFunction) {
+        String authorizerName = "authorizer-" + UUID.randomUUID().toString();
+
+        // https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-authorizer-tokensigningpublickeys.html
+        // NOTE: TokenSigningPublicKeysProperty is not supported so we cannot directly enable signature validation with CDK yet
+
+        // From https://docs.aws.amazon.com/iot/latest/developerguide/custom-auth-troubleshooting.html
+        CfnAuthorizerProps cfnAuthorizerProps = CfnAuthorizerProps.builder()
+                .authorizerFunctionArn(authorizerFunction.getFunctionArn())
+                .authorizerName(authorizerName)
+                .signingDisabled(true)
+                //.tokenKeyName("token")
+                .status("ACTIVE")
+                .build();
+
+        CfnAuthorizer cfnAuthorizer = new CfnAuthorizer(stack, authorizerName, cfnAuthorizerProps);
+
+        allowIotAuthorizerToInvokeLambdaFunction(stack, cfnAuthorizer, authorizerFunction, authorizerName);
+
+        return cfnAuthorizer;
+    }
+
+    public static CfnAuthorizer getIotCustomAuthorizer(Stack stack, File file, Class<IotCustomAuthorizer> iotCustomAuthorizerClass) {
+        @NotNull AssetCode assetCode = Code.fromAsset(file.getAbsolutePath());
+
+        Function authorizerFunction = createAuthorizerFunction(stack, assetCode, iotCustomAuthorizerClass);
+
+        return createIotAuthorizerFromFunction(stack, authorizerFunction);
+    }
+
+    public static List<CfnAuthorizer> getIotCustomAuthorizers(Stack stack, File file) {
+        return findIotCustomAuthorizersInJar(file)
+                .map(clazz -> getIotCustomAuthorizer(stack, file, clazz))
+                .collect(Collectors.toList());
     }
 }
