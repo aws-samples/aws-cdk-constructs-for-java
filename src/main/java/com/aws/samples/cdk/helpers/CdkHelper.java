@@ -25,9 +25,7 @@ public class CdkHelper {
 
     private static Long nextRandomLong() {
         if (!random.isPresent()) {
-            if (!stackName.isPresent()) {
-                throw new RuntimeException("Stack name must be present");
-            }
+            stackName.orElseThrow(() -> new RuntimeException("Stack name must be present"));
 
             random = Optional.of(new Random(UUID.nameUUIDFromBytes(CdkHelper.stackName.get().getBytes()).getLeastSignificantBits()));
         }

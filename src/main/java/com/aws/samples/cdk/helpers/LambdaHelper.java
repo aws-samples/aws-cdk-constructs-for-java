@@ -31,6 +31,7 @@ public class LambdaHelper {
                 .environment(environment)
                 .runtime(runtime)
                 .role(role)
+                .tracing(Tracing.ACTIVE)
                 .build();
 
         return new Function(stack, functionNamePrefix + "Lambda", functionProps);

@@ -58,6 +58,7 @@ public class IotHelper {
 
     public static CfnPermission allowIotAuthorizerToInvokeLambdaFunction(Stack stack, CfnAuthorizer cfnAuthorizer, Function function, String permissionNamePrefix) {
         String iotServicePrincipal = Fn.join(".", Arrays.asList("iot", stack.getUrlSuffix()));
+
         CfnPermissionProps cfnPermissionProps = CfnPermissionProps.builder()
                 .sourceArn(cfnAuthorizer.getAttrArn())
                 .action(SharedPermissions.LAMBDA_INVOKE_FUNCTION)

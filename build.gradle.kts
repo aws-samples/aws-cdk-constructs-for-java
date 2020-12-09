@@ -41,6 +41,7 @@ val autoServiceVersion = "1.0-rc7"
 val javaPoetVersion = "1.13.0"
 val immutablesValueVersion = "2.8.9-ea-1"
 val awsLambdaJavaCoreVersion = "1.2.1"
+val awsLambdaServletVersion = "0.1.3"
 
 repositories {
     mavenCentral()
@@ -82,6 +83,7 @@ dependencies {
     implementation("commons-io:commons-io:$commonsIoVersion")
     api("com.github.awslabs:results-iterator-for-aws-java-sdk:$resultsIteratorForAwsJavaSdkVersion")
     implementation("com.amazonaws:aws-lambda-java-core:$awsLambdaJavaCoreVersion")
+    api("com.github.aws-samples:aws-lambda-servlet:$awsLambdaServletVersion")
 
     testImplementation("junit:junit:$junitVersion")
 }
