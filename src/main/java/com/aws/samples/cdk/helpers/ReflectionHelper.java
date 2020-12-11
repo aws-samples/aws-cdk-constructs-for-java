@@ -10,11 +10,8 @@ import java.io.File;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -22,19 +19,7 @@ public class ReflectionHelper {
     public static final String HANDLE_REQUEST = "handleRequest";
 
     public static <T> Stream<Class<T>> findClassesInJarImplementingInterface(File file, Class<T> interfaceClass) {
-        JarFile jarFile = Try.of(() -> new JarFile(file)).get();
-
-        List<JarEntry> jarEntries = Collections.list(jarFile.entries());
-
-        return jarEntries.stream()
-                // Only look at classes
-                .filter(entry -> entry.getName().endsWith(".class"))
-                // Remove the file extension
-                .map(entry -> entry.getName().replace(".class", ""))
-                // Make sure the class isn't the interface itself
-                .filter(className -> !className.endsWith(interfaceClass.getSimpleName()))
-                // Replace the slash characters in the path with dots so it has a real class name
-                .map(name -> name.replace('/', '.'))
+        return CdkHelper.getCdkAutoWiredClassList(file).stream()
                 // Attempt to load the class
                 .map(clazz -> ReflectionHelper.safeLoadClass(file, clazz))
                 // Removed any classes that failed to load
