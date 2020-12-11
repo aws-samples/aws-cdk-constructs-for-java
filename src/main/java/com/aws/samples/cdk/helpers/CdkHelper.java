@@ -1,5 +1,11 @@
 package com.aws.samples.cdk.helpers;
 
+import io.vavr.control.Try;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.math.BigInteger;
+import java.security.MessageDigest;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
@@ -31,5 +37,34 @@ public class CdkHelper {
         }
 
         return random.get().nextLong();
+    }
+
+    public static String getFileHash(File file) {
+        return Try.withResources(() -> new FileInputStream(file))
+                .of(CdkHelper::digest)
+                .map(CdkHelper::digestToString)
+                // Throw an exception if this fails, we can't continue if it does
+                .get();
+    }
+
+    private static String digestToString(MessageDigest messageDigest) {
+        return new BigInteger(messageDigest.digest())
+                // Make sure the value isn't negative
+                .abs()
+                // Get a base-36 value to keep it compact
+                .toString(36);
+    }
+
+    private static MessageDigest digest(FileInputStream fileInputStream) {
+        MessageDigest messageDigest = Try.of(() -> MessageDigest.getInstance("SHA-256")).get();
+
+        byte[] byteArray = new byte[1024];
+        int bytesCount = 0;
+
+        while ((bytesCount = Try.of(() -> fileInputStream.read(byteArray)).get()) != -1) {
+            messageDigest.update(byteArray, 0, bytesCount);
+        }
+
+        return messageDigest;
     }
 }

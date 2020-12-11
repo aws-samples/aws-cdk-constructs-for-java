@@ -183,46 +183,17 @@ public class IotHelper {
         return cfnAuthorizer;
     }
 
-    public static CfnAuthorizer getIotCustomAuthorizer(Stack stack, File file, Class<IotCustomAuthorizer> iotCustomAuthorizerClass) {
+    public static CfnAuthorizer getIotCustomAuthorizer(Stack stack, File file, Class<IotCustomAuthorizer> iotCustomAuthorizerClass, String hash) {
         @NotNull AssetCode assetCode = Code.fromAsset(file.getAbsolutePath());
 
         Function authorizerFunction = createAuthorizerFunction(stack, assetCode, iotCustomAuthorizerClass);
 
-        return createIotAuthorizerFromFunction(stack, authorizerFunction, getFileHash(file));
+        return createIotAuthorizerFromFunction(stack, authorizerFunction, hash);
     }
 
-    private static String getFileHash(File file) {
-        return Try.withResources(() -> new FileInputStream(file))
-                .of(IotHelper::digest)
-                .map(IotHelper::digestToString)
-                // Throw an exception if this fails, we can't continue if it does
-                .get();
-    }
-
-    private static String digestToString(MessageDigest messageDigest) {
-        return new BigInteger(messageDigest.digest())
-                // Make sure the value isn't negative
-                .abs()
-                // Get a base-36 value to keep it compact
-                .toString(36);
-    }
-
-    private static MessageDigest digest(FileInputStream fileInputStream) {
-        MessageDigest messageDigest = Try.of(() -> MessageDigest.getInstance("SHA-256")).get();
-
-        byte[] byteArray = new byte[1024];
-        int bytesCount = 0;
-
-        while ((bytesCount = Try.of(() -> fileInputStream.read(byteArray)).get()) != -1) {
-            messageDigest.update(byteArray, 0, bytesCount);
-        }
-
-        return messageDigest;
-    }
-
-    public static List<CfnAuthorizer> getIotCustomAuthorizers(Stack stack, File file) {
+    public static List<CfnAuthorizer> getIotCustomAuthorizers(Stack stack, File file, String hash) {
         return findIotCustomAuthorizersInJar(file)
-                .map(clazz -> getIotCustomAuthorizer(stack, file, clazz))
+                .map(clazz -> getIotCustomAuthorizer(stack, file, clazz, hash))
                 .collect(Collectors.toList());
     }
 }
