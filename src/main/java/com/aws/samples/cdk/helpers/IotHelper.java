@@ -2,6 +2,7 @@ package com.aws.samples.cdk.helpers;
 
 import com.aws.samples.cdk.constructs.iam.permissions.SharedPermissions;
 import com.aws.samples.cdk.constructs.iot.authorizer.IotCustomAuthorizer;
+import io.vavr.control.Try;
 import org.jetbrains.annotations.NotNull;
 import software.amazon.awscdk.core.Duration;
 import software.amazon.awscdk.core.Fn;
@@ -17,10 +18,12 @@ import software.amazon.awscdk.services.lambda.Runtime;
 import software.amazon.awscdk.services.lambda.*;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.math.BigInteger;
+import java.security.MessageDigest;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -158,8 +161,8 @@ public class IotHelper {
         return new Function(stack, clazz.getSimpleName(), functionProps);
     }
 
-    private static CfnAuthorizer createIotAuthorizerFromFunction(Stack stack, Function authorizerFunction) {
-        String authorizerName = "authorizer-" + UUID.randomUUID().toString();
+    private static CfnAuthorizer createIotAuthorizerFromFunction(Stack stack, Function authorizerFunction, String hash) {
+        String authorizerName = "authorizer-" + hash;
 
         // https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-authorizer-tokensigningpublickeys.html
         // NOTE: TokenSigningPublicKeysProperty is not supported so we cannot directly enable signature validation with CDK yet
@@ -185,7 +188,36 @@ public class IotHelper {
 
         Function authorizerFunction = createAuthorizerFunction(stack, assetCode, iotCustomAuthorizerClass);
 
-        return createIotAuthorizerFromFunction(stack, authorizerFunction);
+        return createIotAuthorizerFromFunction(stack, authorizerFunction, getFileHash(file));
+    }
+
+    private static String getFileHash(File file) {
+        return Try.withResources(() -> new FileInputStream(file))
+                .of(IotHelper::digest)
+                .map(IotHelper::digestToString)
+                // Throw an exception if this fails, we can't continue if it does
+                .get();
+    }
+
+    private static String digestToString(MessageDigest messageDigest) {
+        return new BigInteger(messageDigest.digest())
+                // Make sure the value isn't negative
+                .abs()
+                // Get a base-36 value to keep it compact
+                .toString(36);
+    }
+
+    private static MessageDigest digest(FileInputStream fileInputStream) {
+        MessageDigest messageDigest = Try.of(() -> MessageDigest.getInstance("SHA-256")).get();
+
+        byte[] byteArray = new byte[1024];
+        int bytesCount = 0;
+
+        while ((bytesCount = Try.of(() -> fileInputStream.read(byteArray)).get()) != -1) {
+            messageDigest.update(byteArray, 0, bytesCount);
+        }
+
+        return messageDigest;
     }
 
     public static List<CfnAuthorizer> getIotCustomAuthorizers(Stack stack, File file) {
