@@ -4,16 +4,15 @@ import com.aws.samples.cdk.annotations.processors.CdkAutoWireProcessor;
 import io.vavr.Tuple;
 import io.vavr.control.Try;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.util.*;
+import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.stream.Collectors;
+import java.util.zip.ZipEntry;
 
 public class CdkHelper {
     public static final String NO_SEPARATOR = "";
@@ -43,12 +42,26 @@ public class CdkHelper {
         return random.get().nextLong();
     }
 
-    public static String getFileHash(File file) {
-        return Try.withResources(() -> new FileInputStream(file))
-                .of(CdkHelper::digest)
-                .map(CdkHelper::digestToString)
-                // Throw an exception if this fails, we can't continue if it does
-                .get();
+    public static String getJarFileHash(File file) {
+        JarFile jarFile = Try.of(() -> new JarFile(file)).get();
+
+        List<InputStream> inputStreamList = jarFile.stream()
+                // Sort the entries by name so they are ordered consistently
+                .sorted(Comparator.comparing(ZipEntry::getName))
+                // Get an input stream for each entry
+                .map(jarEntry -> toInputStream(jarFile, jarEntry))
+                // Collect them into a list so they can be added to the sequence input stream
+                .collect(Collectors.toList());
+
+        // Create a sequence input stream of all of the ordered files
+        SequenceInputStream sequenceInputStream = new SequenceInputStream(Collections.enumeration(inputStreamList));
+
+        // Hash just the content (avoids ZIP file permission and timestamp data from changing the hash)
+        return digestToString(digest(sequenceInputStream));
+    }
+
+    private static InputStream toInputStream(JarFile jarFile, JarEntry jarEntry) {
+        return Try.of(() -> jarFile.getInputStream(jarEntry)).get();
     }
 
     private static String digestToString(MessageDigest messageDigest) {
@@ -59,13 +72,13 @@ public class CdkHelper {
                 .toString(36);
     }
 
-    private static MessageDigest digest(FileInputStream fileInputStream) {
+    private static MessageDigest digest(InputStream inputStream) {
         MessageDigest messageDigest = Try.of(() -> MessageDigest.getInstance("SHA-256")).get();
 
         byte[] byteArray = new byte[1024];
         int bytesCount = 0;
 
-        while ((bytesCount = Try.of(() -> fileInputStream.read(byteArray)).get()) != -1) {
+        while ((bytesCount = Try.of(() -> inputStream.read(byteArray)).get()) != -1) {
             messageDigest.update(byteArray, 0, bytesCount);
         }
 
