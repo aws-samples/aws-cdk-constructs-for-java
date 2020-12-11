@@ -4,7 +4,6 @@ import com.google.auto.service.AutoService;
 import io.vavr.control.Try;
 
 import javax.annotation.processing.*;
-import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import javax.tools.FileObject;
 import javax.tools.StandardLocation;
@@ -66,7 +65,7 @@ public class CdkAutoWireProcessor extends AbstractProcessor {
         annotations.stream()
                 .map(roundEnv::getElementsAnnotatedWith)
                 .flatMap(Collection::stream)
-                .map(Element::getSimpleName)
+                .map(element -> String.join(".", element.getEnclosingElement().toString(), element.getSimpleName()))
                 .map(Object::toString)
                 .forEach(name -> cdkAutoWireClassList.add(name));
 
