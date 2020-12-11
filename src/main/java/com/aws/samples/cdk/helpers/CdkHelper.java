@@ -1,6 +1,7 @@
 package com.aws.samples.cdk.helpers;
 
 import com.aws.samples.cdk.annotations.processors.CdkAutoWireProcessor;
+import io.vavr.Tuple;
 import io.vavr.control.Try;
 
 import java.io.BufferedReader;
@@ -71,14 +72,20 @@ public class CdkHelper {
         return messageDigest;
     }
 
-    public static List<String> getCdkAutoWiredClassList(JarFile jarFile) {
-        return Try.of(() -> jarFile.getJarEntry(CdkAutoWireProcessor.RESOURCE_FILE))
-                .mapTry(jarFile::getInputStream)
+    public static List<String> getCdkAutoWiredClassList(File file) {
+        return Try.of(() -> new JarFile(file))
+                // Get the JAR file object and the JAR entry together
+                .map(jarFile -> Tuple.of(jarFile, jarFile.getJarEntry(CdkAutoWireProcessor.RESOURCE_FILE)))
+                // Get the input stream for the JAR entry from the JAR file
+                .mapTry(tuple -> tuple._1.getInputStream(tuple._2))
                 .filter(Objects::nonNull)
+                // Get a reader and extract the lines
                 .map(inputStream -> new InputStreamReader(inputStream, StandardCharsets.UTF_8))
                 .map(BufferedReader::new)
                 .map(BufferedReader::lines)
+                // Convert the lines to a list
                 .map(stream -> stream.collect(Collectors.toList()))
+                // If we threw an exception then just return an empty list
                 .getOrElse(ArrayList::new);
     }
 }
