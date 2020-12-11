@@ -2,7 +2,6 @@ package com.aws.samples.cdk.helpers;
 
 import com.aws.samples.cdk.constructs.iam.permissions.SharedPermissions;
 import com.aws.samples.cdk.constructs.iot.authorizer.IotCustomAuthorizer;
-import io.vavr.control.Try;
 import org.jetbrains.annotations.NotNull;
 import software.amazon.awscdk.core.Duration;
 import software.amazon.awscdk.core.Fn;
@@ -18,9 +17,6 @@ import software.amazon.awscdk.services.lambda.Runtime;
 import software.amazon.awscdk.services.lambda.*;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.math.BigInteger;
-import java.security.MessageDigest;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -56,7 +52,7 @@ public class IotHelper {
                 .functionName(function.getFunctionArn())
                 .build();
 
-        return new CfnPermission(stack, permissionNamePrefix + IOT_LAMBDA_PERMISSIONS, cfnPermissionProps);
+        return new CfnPermission(stack, getPermissionName(permissionNamePrefix), cfnPermissionProps);
     }
 
     public static CfnPermission allowIotAuthorizerToInvokeLambdaFunction(Stack stack, CfnAuthorizer cfnAuthorizer, Function function, String permissionNamePrefix) {
@@ -69,7 +65,11 @@ public class IotHelper {
                 .functionName(function.getFunctionArn())
                 .build();
 
-        return new CfnPermission(stack, permissionNamePrefix + IOT_LAMBDA_PERMISSIONS, cfnPermissionProps);
+        return new CfnPermission(stack, getPermissionName(permissionNamePrefix), cfnPermissionProps);
+    }
+
+    private static String getPermissionName(String prefix) {
+        return String.join("-", prefix, IOT_LAMBDA_PERMISSIONS);
     }
 
     @NotNull
