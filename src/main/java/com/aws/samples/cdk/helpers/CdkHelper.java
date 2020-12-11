@@ -1,15 +1,18 @@
 package com.aws.samples.cdk.helpers;
 
+import com.aws.samples.cdk.annotations.processors.CdkAutoWireProcessor;
 import io.vavr.control.Try;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.InputStreamReader;
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
+import java.util.jar.JarFile;
+import java.util.stream.Collectors;
 
 public class CdkHelper {
     public static final String NO_SEPARATOR = "";
@@ -66,5 +69,16 @@ public class CdkHelper {
         }
 
         return messageDigest;
+    }
+
+    public static List<String> getCdkAutoWiredClassList(JarFile jarFile) {
+        return Try.of(() -> jarFile.getJarEntry(CdkAutoWireProcessor.RESOURCE_FILE))
+                .mapTry(jarFile::getInputStream)
+                .filter(Objects::nonNull)
+                .map(inputStream -> new InputStreamReader(inputStream, StandardCharsets.UTF_8))
+                .map(BufferedReader::new)
+                .map(BufferedReader::lines)
+                .map(stream -> stream.collect(Collectors.toList()))
+                .getOrElse(ArrayList::new);
     }
 }
