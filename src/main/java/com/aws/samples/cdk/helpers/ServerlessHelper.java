@@ -68,10 +68,8 @@ public class ServerlessHelper {
     }
 
     public static LambdaRestApi buildLambdaRestApiIfPossible(Stack stack, List<AwsLambdaServlet> awsLambdaServlets) {
-        // Special case, this handles all of the root stuff
-        // Special case, this handles all of the root stuff
+        // Special case, this gets the root API
         Optional<LambdaRestApi> optionalLambdaRestApi = awsLambdaServlets.stream()
-                // Special case, this handles all of the root stuff
                 .filter(value -> value.generatedClassInfo.path.equals(ROOT_CATCHALL))
                 .findFirst()
                 .map(value -> value.function)
