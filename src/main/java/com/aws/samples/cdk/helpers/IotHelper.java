@@ -2,6 +2,9 @@ package com.aws.samples.cdk.helpers;
 
 import com.aws.samples.cdk.constructs.iam.permissions.SharedPermissions;
 import com.aws.samples.cdk.constructs.iot.authorizer.IotCustomAuthorizer;
+import com.aws.samples.cdk.constructs.iot.authorizer.data.TokenSigningConfiguration;
+import io.vavr.control.Option;
+import io.vavr.control.Try;
 import org.jetbrains.annotations.NotNull;
 import software.amazon.awscdk.core.Duration;
 import software.amazon.awscdk.core.Fn;
@@ -19,6 +22,7 @@ import software.amazon.awscdk.services.lambda.*;
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -161,18 +165,22 @@ public class IotHelper {
         return new Function(stack, clazz.getSimpleName(), functionProps);
     }
 
-    private static CfnAuthorizer createIotAuthorizerFromFunction(Stack stack, Function authorizerFunction, String hash) {
+    private static CfnAuthorizer createIotAuthorizerFromFunction(Stack stack, Function authorizerFunction, String hash, Option<TokenSigningConfiguration> tokenSigningConfigurationOption) {
         String authorizerName = "authorizer-" + hash;
 
         // https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-authorizer-tokensigningpublickeys.html
         // NOTE: TokenSigningPublicKeysProperty is not supported so we cannot directly enable signature validation with CDK yet
 
+        Option<Map<String, String>> tokenSigningPublicKeysOption = tokenSigningConfigurationOption.map(TokenSigningConfiguration::getMap);
+        Option<String> tokenKeyNameOption = tokenSigningConfigurationOption.map(TokenSigningConfiguration::getTokenKeyName);
+
         // From https://docs.aws.amazon.com/iot/latest/developerguide/custom-auth-troubleshooting.html
         CfnAuthorizerProps cfnAuthorizerProps = CfnAuthorizerProps.builder()
                 .authorizerFunctionArn(authorizerFunction.getFunctionArn())
                 .authorizerName(authorizerName)
-                .signingDisabled(true)
-                //.tokenKeyName("token")
+                .signingDisabled(!tokenSigningPublicKeysOption.isDefined())
+                .tokenKeyName(tokenKeyNameOption.getOrNull())
+                .tokenSigningPublicKeys(tokenSigningPublicKeysOption.getOrNull())
                 .status("ACTIVE")
                 .build();
 
@@ -188,7 +196,11 @@ public class IotHelper {
 
         Function authorizerFunction = createAuthorizerFunction(stack, assetCode, iotCustomAuthorizerClass);
 
-        return createIotAuthorizerFromFunction(stack, authorizerFunction, hash);
+        Option<TokenSigningConfiguration> tokenSigningConfigurationOption = Try.of(() -> iotCustomAuthorizerClass.getDeclaredConstructor().newInstance())
+                .map(IotCustomAuthorizer::getTokenSigningConfigurationOption)
+                .get();
+
+        return createIotAuthorizerFromFunction(stack, authorizerFunction, hash, tokenSigningConfigurationOption);
     }
 
     public static List<CfnAuthorizer> getIotCustomAuthorizers(Stack stack, File file, String hash) {
