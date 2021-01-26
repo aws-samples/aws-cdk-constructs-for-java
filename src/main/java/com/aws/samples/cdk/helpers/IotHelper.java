@@ -168,9 +168,6 @@ public class IotHelper {
     private static CfnAuthorizer createIotAuthorizerFromFunction(Stack stack, Function authorizerFunction, String hash, Option<TokenSigningConfiguration> tokenSigningConfigurationOption) {
         String authorizerName = "authorizer-" + hash;
 
-        // https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-authorizer-tokensigningpublickeys.html
-        // NOTE: TokenSigningPublicKeysProperty is not supported so we cannot directly enable signature validation with CDK yet
-
         Option<Map<String, String>> tokenSigningPublicKeysOption = tokenSigningConfigurationOption.map(TokenSigningConfiguration::getMap);
         Option<String> tokenKeyNameOption = tokenSigningConfigurationOption.map(TokenSigningConfiguration::getTokenKeyName);
 
