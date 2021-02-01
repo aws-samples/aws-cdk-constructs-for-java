@@ -22,13 +22,13 @@ public class CdkHelper {
     public static final String NO_SEPARATOR = "";
     private static Option<String> stackName = Option.none();
     private static Option<Random> random = Option.none();
-    private static Option<Map<String, String>> arguments = Option.of(HashMap.ofAll(System.getenv()));
+    private static Map<String, String> arguments = HashMap.ofAll(Option.of(System.getenv()).getOrElse(java.util.HashMap::new));
 
     public static void setStackName(String stackName) {
         CdkHelper.stackName = Option.of(stackName);
     }
 
-    public static Option<Map<String, String>> getArguments() {
+    public static Map<String, String> getArguments() {
         return arguments;
     }
 
