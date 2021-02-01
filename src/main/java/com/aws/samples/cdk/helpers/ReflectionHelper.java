@@ -56,11 +56,11 @@ public class ReflectionHelper {
                 .map(IamPermission::getPolicyStatement);
     }
 
-    public static Option<PolicyDocumentProps> getOptionPolicyDocumentForClass(File file, String name) {
-        return getOptionPolicyDocumentForPolicyStatements(getPolicyStatementsForClass(file, name));
+    public static Option<PolicyDocumentProps> getPolicyDocumentForClassOption(File file, String name) {
+        return getPolicyDocumentForPolicyStatementsOption(getPolicyStatementsForClass(file, name));
     }
 
-    private static Option<PolicyDocumentProps> getOptionPolicyDocumentForPolicyStatements(List<PolicyStatement> policyStatements) {
+    private static Option<PolicyDocumentProps> getPolicyDocumentForPolicyStatementsOption(List<PolicyStatement> policyStatements) {
         if (policyStatements.size() == 0) {
             return Option.none();
         }

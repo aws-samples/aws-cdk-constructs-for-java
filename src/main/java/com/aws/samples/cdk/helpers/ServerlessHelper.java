@@ -39,13 +39,11 @@ public class ServerlessHelper {
         return generatedClassFinder.getGeneratedClassList(jarFile);
     }
 
-    private static Function getFunction(Stack stack, File file, String className, Option<Map<String, String>> environmentOption) {
+    private static Function getFunction(Stack stack, File file, String className, Map<String, String> environment) {
         String[] splitClassName = className.split("\\.");
         String lastClassName = splitClassName[splitClassName.length - 1];
 
-        Map<String, String> additionalEnvironment = environmentOption.getOrElse(HashMap.empty());
-
-        Option<PolicyDocumentProps> policyDocumentPropsOption = ReflectionHelper.getOptionPolicyDocumentForClass(file, className);
+        Option<PolicyDocumentProps> policyDocumentPropsOption = ReflectionHelper.getPolicyDocumentForClassOption(file, className);
 
         if (policyDocumentPropsOption.isEmpty()) {
             log.warn("No permissions found for " + lastClassName);
@@ -55,16 +53,16 @@ public class ServerlessHelper {
 
         String handlerName = String.join("::", className, HANDLE_REQUEST);
 
-        return LambdaHelper.buildIotEventLambda(stack, lastClassName, role, Runtime.JAVA_11, HashMap.empty(), additionalEnvironment, file.getAbsolutePath(), handlerName, DEFAULT_LAMBDA_FUNCTION_TIMEOUT);
+        return LambdaHelper.buildIotEventLambda(stack, lastClassName, role, Runtime.JAVA_11, HashMap.empty(), environment, file.getAbsolutePath(), handlerName, DEFAULT_LAMBDA_FUNCTION_TIMEOUT);
     }
 
     public static List<AwsLambdaServlet> getAwsLambdaServlets(Stack stack, File file) {
-        return getAwsLambdaServlets(stack, file, Option.none());
+        return getAwsLambdaServlets(stack, file, HashMap.empty());
     }
 
-    public static List<AwsLambdaServlet> getAwsLambdaServlets(Stack stack, File file, Option<Map<String, String>> OptionEnvironment) {
+    public static List<AwsLambdaServlet> getAwsLambdaServlets(Stack stack, File file, Map<String, String> environment) {
         return getGeneratedClassInfo(file)
-                .map(generatedClassInfo -> new AwsLambdaServlet(generatedClassInfo, getFunction(stack, file, generatedClassInfo.className, OptionEnvironment)));
+                .map(generatedClassInfo -> new AwsLambdaServlet(generatedClassInfo, getFunction(stack, file, generatedClassInfo.className, environment)));
     }
 
     public static LambdaRestApi buildLambdaRestApiIfPossible(Stack stack, List<AwsLambdaServlet> awsLambdaServlets) {

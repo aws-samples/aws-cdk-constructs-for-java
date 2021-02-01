@@ -15,10 +15,10 @@ public class StsHelper {
     public static PolicyStatement assumeRolePolicyStatement = getAssumeRolePolicyStatement(Option.none());
 
     @NotNull
-    public static PolicyStatement getAssumeRolePolicyStatement(Option<Role> OptionRole) {
+    public static PolicyStatement getAssumeRolePolicyStatement(Option<Role> roleOption) {
         PolicyStatementProps iotPolicyStatementProps = PolicyStatementProps.builder()
                 .effect(Effect.ALLOW)
-                .resources(List.of(OptionRole.map(Role::getRoleArn).getOrElse(ALL_RESOURCES)).asJava())
+                .resources(List.of(roleOption.map(Role::getRoleArn).getOrElse(ALL_RESOURCES)).asJava())
                 .actions(List.of(STS_ASSUME_ROLE).asJava())
                 .build();
 
