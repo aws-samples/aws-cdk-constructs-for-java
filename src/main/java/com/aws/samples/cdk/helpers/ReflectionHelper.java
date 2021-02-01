@@ -2,6 +2,8 @@ package com.aws.samples.cdk.helpers;
 
 import com.aws.samples.cdk.constructs.iam.permissions.HasIamPermissions;
 import com.aws.samples.cdk.constructs.iam.permissions.IamPermission;
+import io.vavr.collection.List;
+import io.vavr.control.Option;
 import io.vavr.control.Try;
 import software.amazon.awscdk.services.iam.PolicyDocumentProps;
 import software.amazon.awscdk.services.iam.PolicyStatement;
@@ -9,17 +11,12 @@ import software.amazon.awscdk.services.iam.PolicyStatement;
 import java.io.File;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class ReflectionHelper {
     public static final String HANDLE_REQUEST = "handleRequest";
 
-    public static <T> Stream<Class<T>> findClassesInJarImplementingInterface(File file, Class<T> interfaceClass) {
-        return CdkHelper.getCdkAutoWiredClassList(file).stream()
+    public static <T> List<Class<T>> findClassesInJarImplementingInterface(File file, Class<T> interfaceClass) {
+        return CdkHelper.getCdkAutoWiredClassList(file)
                 // Attempt to load the class
                 .map(clazz -> ReflectionHelper.safeLoadClass(file, clazz))
                 // Removed any classes that failed to load
@@ -55,23 +52,21 @@ public class ReflectionHelper {
     private static List<PolicyStatement> getPolicyStatementsForClass(File file, String name) {
         return instantiateHasIamPermissions(file, name)
                 .map(HasIamPermissions::getPermissions)
-                .getOrElseGet(throwable -> new ArrayList<>())
-                .stream()
-                .map(IamPermission::getPolicyStatement)
-                .collect(Collectors.toList());
+                .getOrElseGet(throwable -> List.empty())
+                .map(IamPermission::getPolicyStatement);
     }
 
-    public static Optional<PolicyDocumentProps> getOptionalPolicyDocumentForClass(File file, String name) {
-        return getOptionalPolicyDocumentForPolicyStatements(getPolicyStatementsForClass(file, name));
+    public static Option<PolicyDocumentProps> getOptionPolicyDocumentForClass(File file, String name) {
+        return getOptionPolicyDocumentForPolicyStatements(getPolicyStatementsForClass(file, name));
     }
 
-    private static Optional<PolicyDocumentProps> getOptionalPolicyDocumentForPolicyStatements(List<PolicyStatement> policyStatements) {
+    private static Option<PolicyDocumentProps> getOptionPolicyDocumentForPolicyStatements(List<PolicyStatement> policyStatements) {
         if (policyStatements.size() == 0) {
-            return Optional.empty();
+            return Option.none();
         }
 
-        return Optional.of(PolicyDocumentProps.builder()
-                .statements(policyStatements)
+        return Option.of(PolicyDocumentProps.builder()
+                .statements(policyStatements.asJava())
                 .build());
     }
 }

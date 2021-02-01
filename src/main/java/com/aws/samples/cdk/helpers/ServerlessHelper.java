@@ -4,6 +4,10 @@ import com.aws.samples.cdk.helpers.data.AwsLambdaServlet;
 import com.aws.samples.lambda.servlet.automation.GeneratedClassFinder;
 import com.aws.samples.lambda.servlet.automation.GeneratedClassInfo;
 import io.vavr.Tuple3;
+import io.vavr.collection.HashMap;
+import io.vavr.collection.List;
+import io.vavr.collection.Map;
+import io.vavr.control.Option;
 import io.vavr.control.Try;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -12,14 +16,11 @@ import software.amazon.awscdk.core.Stack;
 import software.amazon.awscdk.services.apigateway.*;
 import software.amazon.awscdk.services.iam.PolicyDocumentProps;
 import software.amazon.awscdk.services.iam.Role;
-import software.amazon.awscdk.services.iot.CfnAuthorizer;
 import software.amazon.awscdk.services.lambda.Function;
 import software.amazon.awscdk.services.lambda.Runtime;
 
 import java.io.File;
-import java.util.*;
 import java.util.jar.JarFile;
-import java.util.stream.Collectors;
 
 import static com.aws.samples.cdk.helpers.IotHelper.DEFAULT_LAMBDA_FUNCTION_TIMEOUT;
 import static com.aws.samples.cdk.helpers.LambdaHelper.getRoleAssumedByLambda;
@@ -38,44 +39,42 @@ public class ServerlessHelper {
         return generatedClassFinder.getGeneratedClassList(jarFile);
     }
 
-    private static Function getFunction(Stack stack, File file, String className, Optional<Map<String, String>> optionalEnvironment) {
+    private static Function getFunction(Stack stack, File file, String className, Option<Map<String, String>> environmentOption) {
         String[] splitClassName = className.split("\\.");
         String lastClassName = splitClassName[splitClassName.length - 1];
 
-        Map<String, String> additionalEnvironment = optionalEnvironment.orElse(new HashMap<>());
+        Map<String, String> additionalEnvironment = environmentOption.getOrElse(HashMap.empty());
 
-        Optional<PolicyDocumentProps> optionalPolicyDocumentProps = ReflectionHelper.getOptionalPolicyDocumentForClass(file, className);
+        Option<PolicyDocumentProps> policyDocumentPropsOption = ReflectionHelper.getOptionPolicyDocumentForClass(file, className);
 
-        if (!optionalPolicyDocumentProps.isPresent()) {
+        if (policyDocumentPropsOption.isEmpty()) {
             log.warn("No permissions found for " + lastClassName);
         }
 
-        Role role = getRoleAssumedByLambda(stack, lastClassName, optionalPolicyDocumentProps);
+        Role role = getRoleAssumedByLambda(stack, lastClassName, policyDocumentPropsOption);
 
         String handlerName = String.join("::", className, HANDLE_REQUEST);
 
-        return LambdaHelper.buildIotEventLambda(stack, lastClassName, role, Runtime.JAVA_11, new HashMap<>(), additionalEnvironment, file.getAbsolutePath(), handlerName, DEFAULT_LAMBDA_FUNCTION_TIMEOUT);
+        return LambdaHelper.buildIotEventLambda(stack, lastClassName, role, Runtime.JAVA_11, HashMap.empty(), additionalEnvironment, file.getAbsolutePath(), handlerName, DEFAULT_LAMBDA_FUNCTION_TIMEOUT);
     }
 
     public static List<AwsLambdaServlet> getAwsLambdaServlets(Stack stack, File file) {
-        return getAwsLambdaServlets(stack, file, Optional.empty());
+        return getAwsLambdaServlets(stack, file, Option.none());
     }
 
-    public static List<AwsLambdaServlet> getAwsLambdaServlets(Stack stack, File file, Optional<Map<String, String>> optionalEnvironment) {
-        return getGeneratedClassInfo(file).stream()
-                .map(generatedClassInfo -> new AwsLambdaServlet(generatedClassInfo, getFunction(stack, file, generatedClassInfo.className, optionalEnvironment)))
-                .collect(Collectors.toList());
+    public static List<AwsLambdaServlet> getAwsLambdaServlets(Stack stack, File file, Option<Map<String, String>> OptionEnvironment) {
+        return getGeneratedClassInfo(file)
+                .map(generatedClassInfo -> new AwsLambdaServlet(generatedClassInfo, getFunction(stack, file, generatedClassInfo.className, OptionEnvironment)));
     }
 
     public static LambdaRestApi buildLambdaRestApiIfPossible(Stack stack, List<AwsLambdaServlet> awsLambdaServlets) {
         // Special case, this gets the root API
-        Optional<LambdaRestApi> optionalLambdaRestApi = awsLambdaServlets.stream()
-                .filter(value -> value.generatedClassInfo.path.equals(ROOT_CATCHALL))
-                .findFirst()
+        Option<LambdaRestApi> lambdaRestApiOption = awsLambdaServlets
+                .find(value -> value.generatedClassInfo.path.equals(ROOT_CATCHALL))
                 .map(value -> value.function)
                 .map(function -> buildLambdaRestApiForRootFunction(stack, function));
 
-        LambdaRestApi lambdaRestApi = optionalLambdaRestApi.orElseThrow(() -> new RuntimeException("Lambda REST API was not built because the root handler could not be found"));
+        LambdaRestApi lambdaRestApi = lambdaRestApiOption.getOrElseThrow(() -> new RuntimeException("Lambda REST API was not built because the root handler could not be found"));
 
         addNonRootFunctions(lambdaRestApi, awsLambdaServlets);
 
@@ -95,19 +94,18 @@ public class ServerlessHelper {
     }
 
     private static List<IResource> addNonRootFunctions(LambdaRestApi lambdaRestApi, List<AwsLambdaServlet> classInfoAndFunctionList) {
-        return classInfoAndFunctionList.stream()
+        return classInfoAndFunctionList
                 .filter(value -> !value.generatedClassInfo.path.equals(ROOT_CATCHALL))
                 .map(ServerlessHelper::trimLeadingSlashIfNecessary)
                 .map(value -> new Tuple3<>(value.generatedClassInfo.path, value.function, lambdaRestApi))
-                .map(ServerlessHelper::buildResource)
-                .collect(Collectors.toList());
+                .map(ServerlessHelper::buildResource);
     }
 
     private static IResource buildResource(Tuple3<String, Function, LambdaRestApi> input) {
         String path = input._1;
         Function function = input._2;
         LambdaRestApi lambdaRestApi = input._3;
-        List<String> cumulativePath = new ArrayList<>();
+        List<String> cumulativePath = List.empty();
         Stack stack = lambdaRestApi.getStack();
 
         @NotNull IResource parent = lambdaRestApi.getRoot();
@@ -118,7 +116,7 @@ public class ServerlessHelper {
                 continue;
             }
 
-            cumulativePath.add(currentPath);
+            cumulativePath = cumulativePath.append(currentPath);
             String cumulativePathString = String.join("-", cumulativePath);
 
             IResource resource = parent.getResource(currentPath);

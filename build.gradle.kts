@@ -41,7 +41,7 @@ val autoServiceVersion = "1.0-rc7"
 val javaPoetVersion = "1.13.0"
 val immutablesValueVersion = "2.8.9-ea-1"
 val awsLambdaJavaCoreVersion = "1.2.1"
-val awsLambdaServletVersion = "0.1.3"
+val awsLambdaServletVersion = "0.2.1"
 
 repositories {
     mavenCentral()

@@ -1,26 +1,25 @@
 package com.aws.samples.cdk.helpers;
 
+import io.vavr.collection.List;
+import io.vavr.control.Option;
 import org.jetbrains.annotations.NotNull;
 import software.amazon.awscdk.services.iam.Effect;
 import software.amazon.awscdk.services.iam.PolicyStatement;
 import software.amazon.awscdk.services.iam.PolicyStatementProps;
 import software.amazon.awscdk.services.iam.Role;
 
-import java.util.Optional;
-
 import static com.aws.samples.cdk.constructs.iam.permissions.SharedPermissions.ALL_RESOURCES;
 import static com.aws.samples.cdk.constructs.iam.permissions.SharedPermissions.STS_ASSUME_ROLE;
-import static java.util.Collections.singletonList;
 
 public class StsHelper {
-    public static PolicyStatement assumeRolePolicyStatement = getAssumeRolePolicyStatement(Optional.empty());
+    public static PolicyStatement assumeRolePolicyStatement = getAssumeRolePolicyStatement(Option.none());
 
     @NotNull
-    public static PolicyStatement getAssumeRolePolicyStatement(Optional<Role> optionalRole) {
+    public static PolicyStatement getAssumeRolePolicyStatement(Option<Role> OptionRole) {
         PolicyStatementProps iotPolicyStatementProps = PolicyStatementProps.builder()
                 .effect(Effect.ALLOW)
-                .resources(singletonList(optionalRole.map(Role::getRoleArn).orElse(ALL_RESOURCES)))
-                .actions(singletonList(STS_ASSUME_ROLE))
+                .resources(List.of(OptionRole.map(Role::getRoleArn).getOrElse(ALL_RESOURCES)).asJava())
+                .actions(List.of(STS_ASSUME_ROLE).asJava())
                 .build();
 
         return new PolicyStatement(iotPolicyStatementProps);

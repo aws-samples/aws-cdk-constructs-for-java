@@ -6,8 +6,7 @@ import software.amazon.awscdk.services.iam.PolicyStatement;
 import software.amazon.awscdk.services.iam.PolicyStatementProps;
 import software.amazon.awssdk.core.SdkSystemSetting;
 import software.amazon.awssdk.services.sts.StsClient;
-
-import java.util.Optional;
+import io.vavr.control.Option;
 
 import static java.util.Collections.singletonList;
 
@@ -45,7 +44,7 @@ public class SharedPermissions {
     public static final String PRICING_ALL = String.join(PERMISSION_DELIMITER, PRICING_PERMISSION_PREFIX, "*");
     public static final String STS_GET_CALLER_IDENTITY_PERMISSION = String.join(PERMISSION_DELIMITER, STS_PERMISSION_PREFIX, "GetCallerIdentity");
 
-    private static Optional<String> optionalAccountId = Optional.empty();
+    private static Option<String> accountIdOption = Option.none();
 
     @NotNull
     public static PolicyStatement getAllowAllPolicyStatement(String action) {
@@ -59,11 +58,11 @@ public class SharedPermissions {
     }
 
     public static String getAccountId() {
-        if (!optionalAccountId.isPresent()) {
-            optionalAccountId = Optional.of(StsClient.create().getCallerIdentity().account());
+        if (accountIdOption.isEmpty()) {
+            accountIdOption = Option.of(StsClient.create().getCallerIdentity().account());
         }
 
-        return optionalAccountId.get();
+        return accountIdOption.get();
     }
 
     public static boolean isRunningInLambda() {

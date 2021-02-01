@@ -2,6 +2,10 @@ package com.aws.samples.cdk.helpers;
 
 import com.aws.samples.cdk.annotations.processors.CdkAutoWireProcessor;
 import io.vavr.Tuple;
+import io.vavr.collection.HashMap;
+import io.vavr.collection.List;
+import io.vavr.collection.Map;
+import io.vavr.control.Option;
 import io.vavr.control.Try;
 
 import java.io.*;
@@ -16,15 +20,15 @@ import java.util.zip.ZipEntry;
 
 public class CdkHelper {
     public static final String NO_SEPARATOR = "";
-    private static Optional<String> stackName = Optional.empty();
-    private static Optional<Random> random = Optional.empty();
-    private static Optional<Map<String, String>> arguments = Optional.ofNullable(System.getenv());
+    private static Option<String> stackName = Option.none();
+    private static Option<Random> random = Option.none();
+    private static Option<Map<String, String>> arguments = Option.of(HashMap.ofAll(System.getenv()));
 
     public static void setStackName(String stackName) {
-        CdkHelper.stackName = Optional.of(stackName);
+        CdkHelper.stackName = Option.of(stackName);
     }
 
-    public static Optional<Map<String, String>> getArguments() {
+    public static Option<Map<String, String>> getArguments() {
         return arguments;
     }
 
@@ -33,10 +37,10 @@ public class CdkHelper {
     }
 
     private static Long nextRandomLong() {
-        if (!random.isPresent()) {
-            stackName.orElseThrow(() -> new RuntimeException("Stack name must be present"));
+        if (random.isEmpty()) {
+            stackName.getOrElseThrow(() -> new RuntimeException("Stack name must be present"));
 
-            random = Optional.of(new Random(UUID.nameUUIDFromBytes(CdkHelper.stackName.get().getBytes()).getLeastSignificantBits()));
+            random = Option.of(new Random(UUID.nameUUIDFromBytes(CdkHelper.stackName.get().getBytes()).getLeastSignificantBits()));
         }
 
         return random.get().nextLong();
@@ -45,7 +49,7 @@ public class CdkHelper {
     public static String getJarFileHash(File file) {
         JarFile jarFile = Try.of(() -> new JarFile(file)).get();
 
-        List<InputStream> inputStreamList = jarFile.stream()
+        java.util.List<InputStream> inputStreamList = jarFile.stream()
                 // Sort the entries by name so they are ordered consistently
                 .sorted(Comparator.comparing(ZipEntry::getName))
                 // Get an input stream for each entry
@@ -97,8 +101,8 @@ public class CdkHelper {
                 .map(BufferedReader::new)
                 .map(BufferedReader::lines)
                 // Convert the lines to a list
-                .map(stream -> stream.collect(Collectors.toList()))
+                .map(List::ofAll)
                 // If we threw an exception then just return an empty list
-                .getOrElse(ArrayList::new);
+                .getOrElse(List.empty());
     }
 }

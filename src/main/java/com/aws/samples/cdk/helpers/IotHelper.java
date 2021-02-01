@@ -3,6 +3,7 @@ package com.aws.samples.cdk.helpers;
 import com.aws.samples.cdk.constructs.iam.permissions.SharedPermissions;
 import com.aws.samples.cdk.constructs.iot.authorizer.IotCustomAuthorizer;
 import com.aws.samples.cdk.constructs.iot.authorizer.data.TokenSigningConfiguration;
+import io.vavr.collection.Stream;
 import io.vavr.control.Option;
 import io.vavr.control.Try;
 import org.jetbrains.annotations.NotNull;
@@ -21,11 +22,9 @@ import software.amazon.awscdk.services.lambda.*;
 
 import java.io.File;
 import java.util.Arrays;
-import java.util.List;
+import io.vavr.collection.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static com.aws.samples.cdk.constructs.iam.permissions.SharedPermissions.*;
 import static com.aws.samples.cdk.helpers.CdkHelper.NO_SEPARATOR;
@@ -142,12 +141,12 @@ public class IotHelper {
         return new PolicyStatement(iotPolicyStatementProps);
     }
 
-    private static Stream<Class<IotCustomAuthorizer>> findIotCustomAuthorizersInJar(File file) {
+    private static List<Class<IotCustomAuthorizer>> findIotCustomAuthorizersInJar(File file) {
         return findClassesInJarImplementingInterface(file, IotCustomAuthorizer.class);
     }
 
     private static Function createAuthorizerFunction(Stack stack, Code code, Class<IotCustomAuthorizer> clazz) {
-        Role role = getRoleAssumedByLambda(stack, clazz.getSimpleName(), Optional.empty());
+        Role role = getRoleAssumedByLambda(stack, clazz.getSimpleName(), Option.none());
 
         String handlerName = String.join("::", clazz.getName(), HANDLE_REQUEST);
 
@@ -202,7 +201,6 @@ public class IotHelper {
 
     public static List<CfnAuthorizer> getIotCustomAuthorizers(Stack stack, File file, String hash) {
         return findIotCustomAuthorizersInJar(file)
-                .map(clazz -> getIotCustomAuthorizer(stack, file, clazz, hash))
-                .collect(Collectors.toList());
+                .map(clazz -> getIotCustomAuthorizer(stack, file, clazz, hash));
     }
 }
