@@ -1,6 +1,7 @@
 package com.aws.samples.cdk.annotations.processors;
 
 import com.google.auto.service.AutoService;
+import io.vavr.collection.List;
 import io.vavr.control.Try;
 
 import javax.annotation.processing.*;
@@ -10,7 +11,10 @@ import javax.tools.StandardLocation;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Scanner;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @AutoService(Processor.class)
@@ -18,13 +22,13 @@ import java.util.stream.Collectors;
 public class CdkAutoWireProcessor extends AbstractProcessor {
     public static final String RESOURCE_FILE = "META-INF/services/" + CdkAutoWireProcessor.class.getName();
 
-    private List<String> cdkAutoWireClassList = new ArrayList<>();
+    private List<String> cdkAutoWireClassList = List.empty();
 
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
         if (roundEnv.processingOver()) {
             generateConfigFiles();
-            cdkAutoWireClassList = new ArrayList<>();
+            cdkAutoWireClassList = List.empty();
         } else {
             processAnnotations(annotations, roundEnv);
         }
@@ -39,15 +43,15 @@ public class CdkAutoWireProcessor extends AbstractProcessor {
         List<String> existingCdkAutoWiredClasses = Try.of(() -> filer.getResource(StandardLocation.CLASS_OUTPUT, "", RESOURCE_FILE))
                 .mapTry(FileObject::openInputStream)
                 .map(this::readFile)
-                .getOrElse(new ArrayList<>());
+                .getOrElse(List.empty());
 
         // Throw an exception if opening the output stream fails
         OutputStream outputStream = Try.of(() -> filer.createResource(StandardLocation.CLASS_OUTPUT, "", RESOURCE_FILE))
                 .mapTry(FileObject::openOutputStream)
                 .get();
 
-        cdkAutoWireClassList.addAll(existingCdkAutoWiredClasses);
-        cdkAutoWireClassList = cdkAutoWireClassList.stream().distinct().collect(Collectors.toList());
+        cdkAutoWireClassList = cdkAutoWireClassList.appendAll(existingCdkAutoWiredClasses);
+        cdkAutoWireClassList = cdkAutoWireClassList.distinct();
 
         String output = String.join("\n", cdkAutoWireClassList);
         Try.run(() -> outputStream.write(output.getBytes(StandardCharsets.UTF_8))).get();
@@ -55,19 +59,19 @@ public class CdkAutoWireProcessor extends AbstractProcessor {
     }
 
     private List<String> readFile(InputStream inputStream) {
-        List<String> output = new ArrayList<>();
+        ArrayList<String> output = new ArrayList<>();
         new Scanner(inputStream).forEachRemaining(output::add);
 
-        return output;
+        return List.ofAll(output);
     }
 
     private boolean processAnnotations(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
-        annotations.stream()
+        cdkAutoWireClassList = cdkAutoWireClassList.appendAll(annotations.stream()
                 .map(roundEnv::getElementsAnnotatedWith)
                 .flatMap(Collection::stream)
                 .map(element -> String.join(".", element.getEnclosingElement().toString(), element.getSimpleName()))
                 .map(Object::toString)
-                .forEach(name -> cdkAutoWireClassList.add(name));
+                .collect(Collectors.toList()));
 
         return true;
     }
