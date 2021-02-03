@@ -2,7 +2,7 @@ package com.aws.samples.cdk.helpers;
 
 import com.aws.samples.cdk.constructs.iam.policies.ApiGatewayPolicies;
 import com.aws.samples.cdk.constructs.iam.policies.LambdaPolicies;
-import io.vavr.collection.HashMap;
+import io.vavr.Tuple;
 import io.vavr.collection.Map;
 import io.vavr.control.Option;
 import software.amazon.awscdk.core.Duration;
@@ -39,8 +39,9 @@ public class LambdaHelper {
     }
 
     public static Role getRoleAssumedByLambda(Stack stack, String name, Option<PolicyDocumentProps> policyDocumentPropsOption) {
-        Map<String, PolicyDocument> policyDocuments = HashMap.empty();
-        policyDocumentPropsOption.map(policyDocumentProps -> policyDocuments.put("root", new PolicyDocument(policyDocumentProps)));
+        Map<String, PolicyDocument> policyDocuments = policyDocumentPropsOption
+                .map(policyDocumentProps -> Tuple.of("root", new PolicyDocument(policyDocumentProps)))
+                .toMap(tuple2 -> tuple2._1, tuple2 -> tuple2._2);
 
         RoleProps roleProps = RoleProps.builder()
                 .assumedBy(LambdaPolicies.LAMBDA_SERVICE_PRINCIPAL)
