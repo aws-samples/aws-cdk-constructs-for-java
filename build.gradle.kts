@@ -54,8 +54,6 @@ dependencies {
     annotationProcessor("com.google.auto.service:auto-service:$autoServiceVersion")
     api("com.google.auto.service:auto-service-annotations:$autoServiceVersion")
 
-    implementation("com.squareup:javapoet:$javaPoetVersion")
-
     // Immutables with JSON support
     annotationProcessor("org.immutables:value:$immutablesValueVersion")
     annotationProcessor("org.immutables:gson:$immutablesValueVersion")
