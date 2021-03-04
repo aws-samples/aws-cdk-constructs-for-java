@@ -1,11 +1,11 @@
-package com.aws.samples.cdk.constructs.iam.permissions.iot.resources;
+package com.aws.samples.cdk.constructs.iam.permissions.iot.dataplane.resources;
 
 import com.aws.samples.cdk.constructs.iam.permissions.IamResource;
 import com.aws.samples.cdk.constructs.iam.permissions.SharedPermissions;
 import io.vavr.collection.List;
 import software.amazon.awscdk.core.Fn;
 
-public interface IotResource extends IamResource {
+public interface IotDataPlaneResource extends IamResource {
     default String getIamString() {
         String delimiter = "";
         List<String> elements = List.of("arn:aws:iot:", getRegion(), ":", getAccountId(), ":", getResourceType(), "/", getResourceValue());

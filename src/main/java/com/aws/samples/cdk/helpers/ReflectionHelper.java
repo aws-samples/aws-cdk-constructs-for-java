@@ -2,6 +2,8 @@ package com.aws.samples.cdk.helpers;
 
 import com.aws.samples.cdk.constructs.iam.permissions.HasIamPermissions;
 import com.aws.samples.cdk.constructs.iam.permissions.IamPermission;
+import com.aws.samples.lambda.servlet.automation.GeneratedClassFinder;
+import com.aws.samples.lambda.servlet.automation.GeneratedClassInfo;
 import io.vavr.collection.List;
 import io.vavr.control.Option;
 import io.vavr.control.Try;
@@ -11,6 +13,7 @@ import software.amazon.awscdk.services.iam.PolicyStatement;
 import java.io.File;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.jar.JarFile;
 
 public class ReflectionHelper {
     public static final String HANDLE_REQUEST = "handleRequest";
@@ -68,5 +71,16 @@ public class ReflectionHelper {
         return Option.of(PolicyDocumentProps.builder()
                 .statements(policyStatements.asJava())
                 .build());
+    }
+
+    public static List<GeneratedClassInfo> getGeneratedClassInfo(File file) {
+        JarFile jarFile = Try.of(() -> new JarFile(file)).get();
+
+        return new GeneratedClassFinder().getGeneratedClassList(jarFile);
+    }
+
+    public static String getLastClassName(String className) {
+        String[] splitClassName = className.split("\\.");
+        return splitClassName[splitClassName.length - 1];
     }
 }

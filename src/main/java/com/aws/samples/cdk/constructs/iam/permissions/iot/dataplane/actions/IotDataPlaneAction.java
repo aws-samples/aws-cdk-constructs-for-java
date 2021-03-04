@@ -1,14 +1,14 @@
-package com.aws.samples.cdk.constructs.iam.permissions.iot.actions;
+package com.aws.samples.cdk.constructs.iam.permissions.iot.dataplane.actions;
 
 import com.aws.samples.cdk.constructs.iam.permissions.IamAction;
 import com.aws.samples.cdk.constructs.iam.permissions.IamPermission;
 import com.aws.samples.cdk.constructs.iam.permissions.IamResource;
-import com.aws.samples.cdk.constructs.iam.permissions.iot.resources.IotResource;
+import com.aws.samples.cdk.constructs.iam.permissions.iot.dataplane.resources.IotDataPlaneResource;
 import io.vavr.Tuple;
 import io.vavr.Tuple2;
 
-public interface IotAction extends IamPermission, IamAction {
-    IotResource getResource();
+public interface IotDataPlaneAction extends IamPermission, IamAction {
+    IotDataPlaneResource getResource();
 
     default IamResource getIamResource() {
         return getResource();

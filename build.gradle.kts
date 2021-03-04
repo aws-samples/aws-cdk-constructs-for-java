@@ -10,13 +10,9 @@ plugins {
 group = "local"
 version = "1.0-SNAPSHOT"
 
-java {
-    toolchain {
-        languageVersion.set(JavaLanguageVersion.of(8))
-    }
-}
+java.toolchain.languageVersion.set(JavaLanguageVersion.of(8))
 
-val gradleDependencyVersion = "6.8.1"
+val gradleDependencyVersion = "6.8.3"
 
 tasks.wrapper {
     gradleVersion = gradleDependencyVersion
@@ -28,14 +24,14 @@ tasks.distTar { enabled = true }
 
 // Specify all of our dependency versions
 val awsCdkVersion = "1.90.1"
+val awsSdkVersion = "2.16.0"
 val vavrVersion = "0.10.3"
 val slf4jVersion = "2.0.0-alpha1"
 val jcabiVersion = "0.19.0"
 val commonsLangVersion = "3.11"
 val commonsIoVersion = "2.8.0"
 val ztZipVersion = "1.14"
-val resultsIteratorForAwsJavaSdkVersion = "11.0.2"
-val daggerVersion = "2.32"
+val resultsIteratorForAwsJavaSdkVersion = "14.0.3"
 val junitVersion = "4.13.2"
 val autoServiceVersion = "1.0-rc7"
 val javaPoetVersion = "1.13.0"
@@ -60,12 +56,6 @@ dependencies {
     implementation("org.immutables:value:$immutablesValueVersion")
     implementation("org.immutables:gson:$immutablesValueVersion")
 
-    // Dagger code generation
-    annotationProcessor("com.google.dagger:dagger-compiler:$daggerVersion")
-
-    // Dependency injection with Dagger
-    implementation("com.google.dagger:dagger:$daggerVersion")
-
     implementation("org.slf4j:slf4j-log4j12:$slf4jVersion")
     implementation("com.jcabi:jcabi-log:$jcabiVersion")
 
@@ -76,12 +66,16 @@ dependencies {
     api("software.amazon.awscdk:lambda:$awsCdkVersion")
     api("software.amazon.awscdk:dynamodb:$awsCdkVersion")
     api("software.amazon.awscdk:apigateway:$awsCdkVersion")
+    implementation("software.amazon.awssdk:apache-client:$awsSdkVersion")
     implementation("io.vavr:vavr:$vavrVersion")
     implementation("org.apache.commons:commons-lang3:$commonsLangVersion")
     implementation("commons-io:commons-io:$commonsIoVersion")
-    api("com.github.awslabs:results-iterator-for-aws-java-sdk:$resultsIteratorForAwsJavaSdkVersion")
+    implementation("com.github.awslabs:results-iterator-for-aws-java-sdk:$resultsIteratorForAwsJavaSdkVersion")
     implementation("com.amazonaws:aws-lambda-java-core:$awsLambdaJavaCoreVersion")
     api("com.github.aws-samples:aws-lambda-servlet:$awsLambdaServletVersion")
 
     testImplementation("junit:junit:$junitVersion")
+
+    // To force dependabot to update the Gradle wrapper dependency
+    testImplementation("org.gradle:gradle-tooling-api:$gradleDependencyVersion")
 }

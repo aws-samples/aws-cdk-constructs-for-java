@@ -1,14 +1,14 @@
-package com.aws.samples.cdk.constructs.iam.permissions.iot.actions;
+package com.aws.samples.cdk.constructs.iam.permissions.iot.dataplane.actions;
 
 import com.aws.samples.cdk.constructs.iam.permissions.SharedPermissions;
-import com.aws.samples.cdk.constructs.iam.permissions.iot.resources.IotResource;
-import com.aws.samples.cdk.constructs.iam.permissions.iot.resources.Topic;
+import com.aws.samples.cdk.constructs.iam.permissions.iot.dataplane.resources.IotDataPlaneResource;
+import com.aws.samples.cdk.constructs.iam.permissions.iot.dataplane.resources.Topic;
 import org.immutables.gson.Gson;
 import org.immutables.value.Value;
 
 @Gson.TypeAdapters
 @Value.Immutable
-public abstract class Publish implements IotAction {
+public abstract class Publish implements IotDataPlaneAction {
     public abstract Topic getTopic();
 
     @Override
@@ -17,7 +17,7 @@ public abstract class Publish implements IotAction {
     }
 
     @Override
-    public IotResource getResource() {
+    public IotDataPlaneResource getResource() {
         return getTopic();
     }
 }

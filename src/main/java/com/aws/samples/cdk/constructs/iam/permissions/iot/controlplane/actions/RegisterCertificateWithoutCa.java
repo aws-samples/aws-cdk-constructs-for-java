@@ -1,4 +1,4 @@
-package com.aws.samples.cdk.constructs.iam.permissions.sts.actions;
+package com.aws.samples.cdk.constructs.iam.permissions.iot.controlplane.actions;
 
 import com.aws.samples.cdk.constructs.iam.permissions.IamAction;
 import com.aws.samples.cdk.constructs.iam.permissions.IamPermission;
@@ -11,13 +11,13 @@ import org.immutables.value.Value;
 
 @Gson.TypeAdapters
 @Value.Immutable
-public abstract class GetCallerIdentity implements IamPermission {
+public abstract class RegisterCertificateWithoutCa implements IamPermission {
     @Override
     public Tuple2<IamAction, IamResource> getActionAndResource() {
         IamAction iamAction = new IamAction() {
             @Override
             public String getIamString() {
-                return SharedPermissions.STS_GET_CALLER_IDENTITY_PERMISSION;
+                return SharedPermissions.IOT_REGISTER_CERTIFICATE_WITHOUT_CA;
             }
 
             @Override

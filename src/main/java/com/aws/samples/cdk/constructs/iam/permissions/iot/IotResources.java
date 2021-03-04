@@ -1,6 +1,6 @@
 package com.aws.samples.cdk.constructs.iam.permissions.iot;
 
-import com.aws.samples.cdk.constructs.iam.permissions.iot.resources.*;
+import com.aws.samples.cdk.constructs.iam.permissions.iot.dataplane.resources.*;
 
 public class IotResources {
     public static Topic topic(String topic) {

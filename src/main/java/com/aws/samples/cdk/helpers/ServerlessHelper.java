@@ -1,68 +1,38 @@
 package com.aws.samples.cdk.helpers;
 
 import com.aws.samples.cdk.helpers.data.AwsLambdaServlet;
-import com.aws.samples.lambda.servlet.automation.GeneratedClassFinder;
-import com.aws.samples.lambda.servlet.automation.GeneratedClassInfo;
 import io.vavr.Tuple3;
-import io.vavr.collection.HashMap;
 import io.vavr.collection.List;
-import io.vavr.collection.Map;
 import io.vavr.control.Option;
-import io.vavr.control.Try;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import software.amazon.awscdk.core.Stack;
 import software.amazon.awscdk.services.apigateway.*;
-import software.amazon.awscdk.services.iam.PolicyDocumentProps;
-import software.amazon.awscdk.services.iam.Role;
 import software.amazon.awscdk.services.lambda.Function;
-import software.amazon.awscdk.services.lambda.Runtime;
+import software.amazon.awscdk.services.lambda.FunctionProps;
 
 import java.io.File;
-import java.util.jar.JarFile;
 
-import static com.aws.samples.cdk.helpers.IotHelper.DEFAULT_LAMBDA_FUNCTION_TIMEOUT;
-import static com.aws.samples.cdk.helpers.LambdaHelper.getRoleAssumedByLambda;
-import static com.aws.samples.cdk.helpers.ReflectionHelper.HANDLE_REQUEST;
+import static com.aws.samples.cdk.helpers.LambdaHelper.getFunction;
+import static com.aws.samples.cdk.helpers.ReflectionHelper.getGeneratedClassInfo;
 import static java.util.Collections.singletonList;
 
+/**
+ * Functions that specifically help with creating higher order features on top of AWS Lambda (e.g. REST interfaces via API gateway)
+ */
 public class ServerlessHelper {
-    private static final Logger log = LoggerFactory.getLogger(ServerlessHelper.class);
     public static final String ROOT_CATCHALL = "/*";
     public static final String AUTHORIZERS = "AUTHORIZERS";
-
-    private static List<GeneratedClassInfo> getGeneratedClassInfo(File file) {
-        JarFile jarFile = Try.of(() -> new JarFile(file)).get();
-
-        GeneratedClassFinder generatedClassFinder = new GeneratedClassFinder();
-        return generatedClassFinder.getGeneratedClassList(jarFile);
-    }
-
-    private static Function getFunction(Stack stack, File file, String className, Map<String, String> environment) {
-        String[] splitClassName = className.split("\\.");
-        String lastClassName = splitClassName[splitClassName.length - 1];
-
-        Option<PolicyDocumentProps> policyDocumentPropsOption = ReflectionHelper.getPolicyDocumentForClassOption(file, className);
-
-        if (policyDocumentPropsOption.isEmpty()) {
-            log.warn("No permissions found for " + lastClassName);
-        }
-
-        Role role = getRoleAssumedByLambda(stack, lastClassName, policyDocumentPropsOption);
-
-        String handlerName = String.join("::", className, HANDLE_REQUEST);
-
-        return LambdaHelper.buildIotEventLambda(stack, lastClassName, role, Runtime.JAVA_11, HashMap.empty(), environment, file.getAbsolutePath(), handlerName, DEFAULT_LAMBDA_FUNCTION_TIMEOUT);
-    }
+    private static final Logger log = LoggerFactory.getLogger(ServerlessHelper.class);
 
     public static List<AwsLambdaServlet> getAwsLambdaServlets(Stack stack, File file) {
-        return getAwsLambdaServlets(stack, file, HashMap.empty());
+        return getAwsLambdaServlets(stack, file, Option.none());
     }
 
-    public static List<AwsLambdaServlet> getAwsLambdaServlets(Stack stack, File file, Map<String, String> environment) {
+    public static List<AwsLambdaServlet> getAwsLambdaServlets(Stack stack, File file, Option<FunctionProps.Builder> functionPropsBuilderOption) {
         return getGeneratedClassInfo(file)
-                .map(generatedClassInfo -> new AwsLambdaServlet(generatedClassInfo, getFunction(stack, file, generatedClassInfo.className, environment)));
+                .map(generatedClassInfo -> new AwsLambdaServlet(generatedClassInfo, getFunction(stack, file, generatedClassInfo.className, functionPropsBuilderOption)));
     }
 
     public static LambdaRestApi buildLambdaRestApiIfPossible(Stack stack, List<AwsLambdaServlet> awsLambdaServlets) {

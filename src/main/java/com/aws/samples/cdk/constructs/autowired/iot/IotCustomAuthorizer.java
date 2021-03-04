@@ -1,4 +1,4 @@
-package com.aws.samples.cdk.constructs.iot.authorizer;
+package com.aws.samples.cdk.constructs.autowired.iot;
 
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.aws.samples.cdk.constructs.iot.authorizer.data.TokenSigningConfiguration;

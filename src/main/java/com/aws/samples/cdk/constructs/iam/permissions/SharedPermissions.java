@@ -33,6 +33,10 @@ public class SharedPermissions {
     public static final String IOT_CONNECT_PERMISSION = String.join(PERMISSION_DELIMITER, IOT_PERMISSION_PREFIX, "Connect");
     public static final String IOT_SUBSCRIBE_PERMISSION = String.join(PERMISSION_DELIMITER, IOT_PERMISSION_PREFIX, "Subscribe");
     public static final String IOT_RECEIVE_PERMISSION = String.join(PERMISSION_DELIMITER, IOT_PERMISSION_PREFIX, "Receive");
+    public static final String IOT_CREATE_CERTIFICATE_FROM_CSR_PERMISSION = String.join(PERMISSION_DELIMITER, IOT_PERMISSION_PREFIX, "CreateCertificateFromCsr");
+    public static final String IOT_REGISTER_CERTIFICATE_WITHOUT_CA = String.join(PERMISSION_DELIMITER, IOT_PERMISSION_PREFIX, "RegisterCertificateWithoutCa");
+    public static final String IOT_UPDATE_CERTIFICATE = String.join(PERMISSION_DELIMITER, IOT_PERMISSION_PREFIX, "UpdateCertificate");
+    public static final String IOT_DELETE_CERTIFICATE = String.join(PERMISSION_DELIMITER, IOT_PERMISSION_PREFIX, "DeleteCertificate");
     private static final String CLOUDWATCH_LOGS_PERMISSION_PREFIX = "logs";
     public static final String CLOUDWATCH_LOGS_CREATE_LOG_GROUP = String.join(PERMISSION_DELIMITER, CLOUDWATCH_LOGS_PERMISSION_PREFIX, "CreateLogGroup");
     public static final String CLOUDWATCH_LOGS_CREATE_LOG_STREAM = String.join(PERMISSION_DELIMITER, CLOUDWATCH_LOGS_PERMISSION_PREFIX, "CreateLogStream");

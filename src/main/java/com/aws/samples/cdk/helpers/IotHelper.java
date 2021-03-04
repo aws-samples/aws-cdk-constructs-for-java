@@ -1,13 +1,11 @@
 package com.aws.samples.cdk.helpers;
 
 import com.aws.samples.cdk.constructs.iam.permissions.SharedPermissions;
-import com.aws.samples.cdk.constructs.iot.authorizer.IotCustomAuthorizer;
+import com.aws.samples.cdk.constructs.autowired.iot.IotCustomAuthorizer;
 import com.aws.samples.cdk.constructs.iot.authorizer.data.TokenSigningConfiguration;
-import io.vavr.collection.Stream;
 import io.vavr.control.Option;
 import io.vavr.control.Try;
 import org.jetbrains.annotations.NotNull;
-import software.amazon.awscdk.core.Duration;
 import software.amazon.awscdk.core.Fn;
 import software.amazon.awscdk.core.Stack;
 import software.amazon.awscdk.services.iam.Effect;
@@ -24,7 +22,6 @@ import java.io.File;
 import java.util.Arrays;
 import io.vavr.collection.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import static com.aws.samples.cdk.constructs.iam.permissions.SharedPermissions.*;
 import static com.aws.samples.cdk.helpers.CdkHelper.NO_SEPARATOR;
@@ -34,7 +31,6 @@ import static com.aws.samples.cdk.helpers.ReflectionHelper.findClassesInJarImple
 import static java.util.Collections.singletonList;
 
 public class IotHelper {
-    public static final Duration DEFAULT_LAMBDA_FUNCTION_TIMEOUT = Duration.seconds(10);
     public static final String TOPIC = ":topic/";
     public static final String ALL_SUFFIX = "/*";
     public static final String TOPICFILTER = ":topicfilter/";
@@ -154,7 +150,7 @@ public class IotHelper {
                 .code(code)
                 .handler(handlerName)
                 .memorySize(1024)
-                .timeout(DEFAULT_LAMBDA_FUNCTION_TIMEOUT)
+                .timeout(LambdaHelper.DEFAULT_LAMBDA_FUNCTION_TIMEOUT)
                 .runtime(Runtime.JAVA_11)
                 .role(role)
                 .functionName(String.join("-", stack.getStackName(), clazz.getSimpleName()))
