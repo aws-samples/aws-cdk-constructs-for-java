@@ -8,6 +8,7 @@ import io.vavr.control.Try;
 
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Map;
 import java.util.NoSuchElementException;
 
 import static com.awslabs.general.helpers.implementations.IoHelper.toByteArray;
@@ -65,13 +66,15 @@ public abstract class CustomResourceFunction implements RequestStreamHandler, Ha
      *
      * @param customResourceRequest
      * @param context
+     * @param data
      * @return
      */
-    protected CustomResourceResponse simpleDeleteSuccess(CustomResourceRequest customResourceRequest, Context context) {
+    protected CustomResourceResponse simpleDeleteSuccess(CustomResourceRequest customResourceRequest, Context context, Map data) {
         return ImmutableCustomResourceResponse.builder()
                 .customResourceRequest(customResourceRequest)
                 .context(context)
                 .status(CustomResourceStatus.SUCCESS)
+                .data(data)
                 // In a delete request the physical resource ID must be present
                 .physicalResourceId(customResourceRequest.getPhysicalResourceId().get())
                 .build();
@@ -82,13 +85,16 @@ public abstract class CustomResourceFunction implements RequestStreamHandler, Ha
      *
      * @param customResourceRequest
      * @param context
+     * @param newPhysicalResourceId
+     * @param data
      * @return
      */
-    protected CustomResourceResponse simpleCreateOrUpdateSuccess(CustomResourceRequest customResourceRequest, Context context, String newPhysicalResourceId) {
+    protected CustomResourceResponse simpleCreateOrUpdateSuccess(CustomResourceRequest customResourceRequest, Context context, String newPhysicalResourceId, Map data) {
         return ImmutableCustomResourceResponse.builder()
                 .customResourceRequest(customResourceRequest)
                 .context(context)
                 .status(CustomResourceStatus.SUCCESS)
+                .data(data)
                 .physicalResourceId(newPhysicalResourceId)
                 .build();
     }
