@@ -11,7 +11,7 @@ import org.immutables.value.Value;
 
 @Gson.TypeAdapters
 @Value.Immutable
-public abstract class GetCallerIdentity implements IamPermission {
+public class GetCallerIdentity implements IamPermission {
     @Override
     public Tuple2<IamAction, IamResource> getActionAndResource() {
         IamAction iamAction = new IamAction() {
