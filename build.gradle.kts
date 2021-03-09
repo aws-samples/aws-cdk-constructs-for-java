@@ -26,8 +26,6 @@ tasks.distTar { enabled = true }
 val awsCdkVersion = "1.90.1"
 val awsSdkVersion = "2.16.0"
 val vavrVersion = "0.10.3"
-val slf4jVersion = "2.0.0-alpha1"
-val jcabiVersion = "0.19.0"
 val commonsLangVersion = "3.11"
 val commonsIoVersion = "2.8.0"
 val ztZipVersion = "1.14"
@@ -38,6 +36,7 @@ val javaPoetVersion = "1.13.0"
 val immutablesValueVersion = "2.8.9-ea-1"
 val awsLambdaJavaCoreVersion = "1.2.1"
 val awsLambdaServletVersion = "0.2.4"
+val log4jVersion = "2.13.0"
 
 repositories {
     mavenCentral()
@@ -56,8 +55,9 @@ dependencies {
     implementation("org.immutables:value:$immutablesValueVersion")
     implementation("org.immutables:gson:$immutablesValueVersion")
 
-    implementation("org.slf4j:slf4j-log4j12:$slf4jVersion")
-    implementation("com.jcabi:jcabi-log:$jcabiVersion")
+    implementation("org.apache.logging.log4j:log4j-api:$log4jVersion")
+    implementation("org.apache.logging.log4j:log4j-core:$log4jVersion")
+    api("org.apache.logging.log4j:log4j-slf4j18-impl:$log4jVersion")
 
     implementation("software.amazon.awscdk:core:$awsCdkVersion")
     api("software.amazon.awscdk:iam:$awsCdkVersion")
