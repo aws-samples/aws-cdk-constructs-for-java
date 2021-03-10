@@ -36,7 +36,7 @@ val javaPoetVersion = "1.13.0"
 val immutablesValueVersion = "2.8.9-ea-1"
 val awsLambdaJavaCoreVersion = "1.2.1"
 val awsLambdaServletVersion = "0.2.4"
-val log4jVersion = "2.13.0"
+val log4jVersion = "2.14.0"
 
 repositories {
     mavenCentral()
