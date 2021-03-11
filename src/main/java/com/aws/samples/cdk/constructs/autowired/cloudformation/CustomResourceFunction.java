@@ -49,9 +49,13 @@ public abstract class CustomResourceFunction implements RequestStreamHandler, Ha
     private Try<CustomResourceResponse> createFailureResponse(Throwable throwable, CustomResourceRequest customResourceRequest, Context context) {
         return Try.of(() -> ImmutableCustomResourceResponse.builder()
                 .customResourceRequest(customResourceRequest)
+                .context(context)
                 .status(CustomResourceStatus.FAILED)
                 .reason(throwable.getMessage())
-                .context(context)
+                .logicalResourceId(customResourceRequest.getLogicalResourceId())
+                .requestId(customResourceRequest.getRequestId())
+                .stackId(customResourceRequest.getStackId())
+                .physicalResourceId(customResourceRequest.getPhysicalResourceId().orElse(null))
                 .build());
     }
 
@@ -76,8 +80,9 @@ public abstract class CustomResourceFunction implements RequestStreamHandler, Ha
                 .status(CustomResourceStatus.SUCCESS)
                 .data(data)
                 .logicalResourceId(customResourceRequest.getLogicalResourceId())
-                // In a delete request the physical resource ID must be present
-                .physicalResourceId(customResourceRequest.getPhysicalResourceId().get())
+                .requestId(customResourceRequest.getRequestId())
+                .stackId(customResourceRequest.getStackId())
+                .physicalResourceId(customResourceRequest.getPhysicalResourceId().orElse(null))
                 .build();
     }
 
@@ -97,6 +102,8 @@ public abstract class CustomResourceFunction implements RequestStreamHandler, Ha
                 .status(CustomResourceStatus.SUCCESS)
                 .data(data)
                 .logicalResourceId(customResourceRequest.getLogicalResourceId())
+                .requestId(customResourceRequest.getRequestId())
+                .stackId(customResourceRequest.getStackId())
                 .physicalResourceId(newPhysicalResourceId)
                 .build();
     }
