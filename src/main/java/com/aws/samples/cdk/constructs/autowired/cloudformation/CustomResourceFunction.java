@@ -75,6 +75,7 @@ public abstract class CustomResourceFunction implements RequestStreamHandler, Ha
                 .context(context)
                 .status(CustomResourceStatus.SUCCESS)
                 .data(data)
+                .logicalResourceId(customResourceRequest.getLogicalResourceId())
                 // In a delete request the physical resource ID must be present
                 .physicalResourceId(customResourceRequest.getPhysicalResourceId().get())
                 .build();
@@ -95,6 +96,7 @@ public abstract class CustomResourceFunction implements RequestStreamHandler, Ha
                 .context(context)
                 .status(CustomResourceStatus.SUCCESS)
                 .data(data)
+                .logicalResourceId(customResourceRequest.getLogicalResourceId())
                 .physicalResourceId(newPhysicalResourceId)
                 .build();
     }
