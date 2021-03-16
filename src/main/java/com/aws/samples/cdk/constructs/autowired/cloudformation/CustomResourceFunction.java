@@ -74,16 +74,20 @@ public abstract class CustomResourceFunction implements RequestStreamHandler, Ha
      * @return
      */
     protected CustomResourceResponse simpleDeleteSuccess(CustomResourceRequest customResourceRequest, Context context, Map data) {
-        return ImmutableCustomResourceResponse.builder()
+        ImmutableCustomResourceResponse.Builder builder = ImmutableCustomResourceResponse.builder()
                 .customResourceRequest(customResourceRequest)
                 .context(context)
                 .status(CustomResourceStatus.SUCCESS)
-                .data(data)
                 .logicalResourceId(customResourceRequest.getLogicalResourceId())
                 .requestId(customResourceRequest.getRequestId())
                 .stackId(customResourceRequest.getStackId())
-                .physicalResourceId(customResourceRequest.getPhysicalResourceId().orElse(null))
-                .build();
+                .physicalResourceId(customResourceRequest.getPhysicalResourceId().get());
+
+        if (data != null) {
+            builder = builder.data(data);
+        }
+
+        return builder.build();
     }
 
     /**
@@ -96,16 +100,20 @@ public abstract class CustomResourceFunction implements RequestStreamHandler, Ha
      * @return
      */
     protected CustomResourceResponse simpleCreateOrUpdateSuccess(CustomResourceRequest customResourceRequest, Context context, String newPhysicalResourceId, Map data) {
-        return ImmutableCustomResourceResponse.builder()
+        ImmutableCustomResourceResponse.Builder builder = ImmutableCustomResourceResponse.builder()
                 .customResourceRequest(customResourceRequest)
                 .context(context)
                 .status(CustomResourceStatus.SUCCESS)
-                .data(data)
                 .logicalResourceId(customResourceRequest.getLogicalResourceId())
                 .requestId(customResourceRequest.getRequestId())
                 .stackId(customResourceRequest.getStackId())
-                .physicalResourceId(newPhysicalResourceId)
-                .build();
+                .physicalResourceId(newPhysicalResourceId);
+
+        if (data != null) {
+            builder = builder.data(data);
+        }
+
+        return builder.build();
     }
 
     protected <T> Try<T> tryGetValue(CustomResourceRequest customResourceRequest, String key, Class<T> clazz) {
