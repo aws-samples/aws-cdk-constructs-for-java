@@ -24,7 +24,7 @@ tasks.distTar { enabled = true }
 
 // Specify all of our dependency versions
 val awsCdkVersion = "1.90.1"
-val awsSdkVersion = "2.16.0"
+val awsSdkVersion = "2.16.28"
 val vavrVersion = "0.10.3"
 val commonsLangVersion = "3.11"
 val commonsIoVersion = "2.8.0"
