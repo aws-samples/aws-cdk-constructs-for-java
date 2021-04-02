@@ -1,5 +1,5 @@
 plugins {
-    kotlin("jvm") version "1.4.30"
+    kotlin("jvm") version "1.4.32"
     id("application")
     id("java")
     id("idea")
@@ -23,10 +23,10 @@ tasks.distZip { enabled = true }
 tasks.distTar { enabled = true }
 
 // Specify all of our dependency versions
-val awsCdkVersion = "1.90.1"
+val awsCdkVersion = "1.96.0"
 val awsSdkVersion = "2.16.0"
 val vavrVersion = "0.10.3"
-val commonsLangVersion = "3.11"
+val commonsLangVersion = "3.12.0"
 val commonsIoVersion = "2.8.0"
 val ztZipVersion = "1.14"
 val resultsIteratorForAwsJavaSdkVersion = "15.0.3"
@@ -36,7 +36,7 @@ val javaPoetVersion = "1.13.0"
 val immutablesValueVersion = "2.8.9-ea-1"
 val awsLambdaJavaCoreVersion = "1.2.1"
 val awsLambdaServletVersion = "0.2.4"
-val log4jVersion = "2.13.0"
+val log4jVersion = "2.14.0"
 
 repositories {
     mavenCentral()
