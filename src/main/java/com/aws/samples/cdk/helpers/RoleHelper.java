@@ -11,13 +11,18 @@ import software.amazon.awscdk.core.Stack;
 import software.amazon.awscdk.services.iam.*;
 
 import static com.aws.samples.cdk.constructs.iam.policies.CloudWatchLogsPolicies.minimalCloudWatchEventsLoggingPolicy;
+import static com.aws.samples.cdk.helpers.IotHelper.DESCRIBE_ENDPOINT_POLICY_STATEMENT;
 import static com.aws.samples.cdk.helpers.IotHelper.getPublishToTopicPolicyStatement;
 
 public class RoleHelper {
     public static Role buildPublishToTopicRole(Stack stack, String rolePrefix, String topic, List<PolicyStatement> policyStatements, List<ManagedPolicy> managedPolicies, IPrincipal iPrincipal) {
         PolicyStatement iotPolicyStatement = getPublishToTopicPolicyStatement(stack, topic);
 
-        return buildRoleAssumedByPrincipal(stack, rolePrefix + "Role", combinePolicyStatements(policyStatements, iotPolicyStatement), managedPolicies, iPrincipal);
+        List<PolicyStatement> policyStatementList = List.of(iotPolicyStatement)
+                .appendAll(policyStatements)
+                .append(DESCRIBE_ENDPOINT_POLICY_STATEMENT);
+
+        return buildRoleAssumedByPrincipal(stack, rolePrefix + "Role", policyStatementList, managedPolicies, iPrincipal);
     }
 
     public static Role buildRoleAssumedByLambda(Construct construct, String roleName, List<PolicyStatement> policyStatements, List<ManagedPolicy> managedPolicies) {
@@ -46,12 +51,6 @@ public class RoleHelper {
                 .build();
 
         return new Role(construct, roleName, roleProps);
-    }
-
-    @NotNull
-    public static List<PolicyStatement> combinePolicyStatements(List<PolicyStatement> policyStatements, PolicyStatement policyStatement) {
-        return List.of(policyStatement)
-                .appendAll(policyStatements);
     }
 
     public static Role buildPublishToTopicPrefixIotEventRole(Stack stack, String rolePrefix, String topicPrefix, List<PolicyStatement> policyStatements, List<ManagedPolicy> managedPolicies, IPrincipal iPrincipal) {

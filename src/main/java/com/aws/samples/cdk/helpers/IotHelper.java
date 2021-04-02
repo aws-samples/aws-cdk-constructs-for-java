@@ -88,7 +88,7 @@ public class IotHelper {
             .actions(singletonList(IOT_DESCRIBE_ENDPOINT_PERMISSION))
             .build();
 
-    public static final PolicyStatement describeEndpointPolicyStatement = new PolicyStatement(describeEndpointPolicyStatementProps);
+    public static final PolicyStatement DESCRIBE_ENDPOINT_POLICY_STATEMENT = new PolicyStatement(describeEndpointPolicyStatementProps);
 
     @NotNull
     public static PolicyStatement getPublishToTopicPrefixPolicyStatement(Stack stack, String topicPrefix) {
