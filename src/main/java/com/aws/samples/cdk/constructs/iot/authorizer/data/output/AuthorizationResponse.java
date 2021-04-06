@@ -8,7 +8,7 @@ public class AuthorizationResponse {
     public boolean isAuthenticated;
     public String principalId;
     public int disconnectAfterInSeconds;
-    public int refreshAfterInSeconds;
+    public int refreshAfterInSecs;
     // This must be a java.util.List, not an io.vavr.collection.List, so serialization to JSON in Lambda works
     public List<PolicyDocument> policyDocuments;
 }
