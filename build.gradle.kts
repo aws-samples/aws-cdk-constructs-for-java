@@ -4,15 +4,14 @@ plugins {
     id("java")
     id("idea")
     id("java-library")
-    id("maven")
+    id("maven-publish")
 }
 
-group = "local"
-version = "1.0-SNAPSHOT"
+publishing.publications.create<MavenPublication>("maven").from(components["java"])
 
 java.toolchain.languageVersion.set(JavaLanguageVersion.of(8))
 
-val gradleDependencyVersion = "6.8.3"
+val gradleDependencyVersion = "7.0"
 
 tasks.wrapper {
     gradleVersion = gradleDependencyVersion
@@ -21,6 +20,9 @@ tasks.wrapper {
 
 tasks.distZip { enabled = true }
 tasks.distTar { enabled = true }
+
+group = "local"
+version = "1.0-SNAPSHOT"
 
 // Specify all of our dependency versions
 val awsCdkVersion = "1.96.0"
@@ -40,6 +42,7 @@ val log4jVersion = "2.14.1"
 
 repositories {
     mavenCentral()
+    mavenLocal()
     maven(url = "https://repo.gradle.org/gradle/libs-releases-local/")
     maven(url = "https://jitpack.io")
 }
