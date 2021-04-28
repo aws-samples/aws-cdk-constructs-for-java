@@ -7,6 +7,8 @@ import com.aws.samples.lambda.servlet.automation.GeneratedClassInfo;
 import io.vavr.collection.List;
 import io.vavr.control.Option;
 import io.vavr.control.Try;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import software.amazon.awscdk.services.iam.PolicyDocumentProps;
 import software.amazon.awscdk.services.iam.PolicyStatement;
 
@@ -16,6 +18,7 @@ import java.net.URLClassLoader;
 import java.util.jar.JarFile;
 
 public class ReflectionHelper {
+    private static final Logger log = LoggerFactory.getLogger(ReflectionHelper.class);
     public static final String HANDLE_REQUEST = "handleRequest";
 
     public static <T> List<Class<T>> findClassesInJarImplementingInterface(File file, Class<T> interfaceClass) {
@@ -35,9 +38,22 @@ public class ReflectionHelper {
     private static Try<? extends Class<?>> safeLoadClass(File file, String name) {
         try {
             return Try.of(() -> getJarFileClassLoader(file).loadClass(name));
-        } catch (LinkageError e) {
-            return Try.failure(new RuntimeException(e));
+        } catch (UnsupportedClassVersionError exception) {
+            logUnsupportedClassVersionError(file, name);
+
+            // This is fatal, rethrow it
+            throw exception;
         }
+    }
+
+    private static void logUnsupportedClassVersionError(File file, String name) {
+        String path = Try.of(file::getCanonicalFile)
+                .map(File::getAbsolutePath)
+                .getOrElse(file::getAbsolutePath);
+
+        log.error("The class [" + name + "] could not be loaded from [" + path + "]");
+        log.error("The current JVM is older than the class file version compiled in this JAR");
+        log.error("Try updating the JVM version (full exception below)");
     }
 
     private static URLClassLoader getJarFileClassLoader(File file) {
@@ -64,7 +80,7 @@ public class ReflectionHelper {
     }
 
     private static Option<PolicyDocumentProps> getPolicyDocumentForPolicyStatementsOption(List<PolicyStatement> policyStatements) {
-        if (policyStatements.size() == 0) {
+        if (policyStatements.isEmpty()) {
             return Option.none();
         }
 
