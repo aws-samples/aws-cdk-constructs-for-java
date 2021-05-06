@@ -14,7 +14,7 @@ import static com.aws.samples.cdk.helpers.IotHelper.DESCRIBE_ENDPOINT_POLICY_STA
 import static com.aws.samples.cdk.helpers.IotHelper.getPublishToTopicPolicyStatement;
 
 public class RoleHelper {
-    public static Role buildPublishToTopicRole(Stack stack, String rolePrefix, String topic, List<PolicyStatement> policyStatements, List<ManagedPolicy> managedPolicies, IPrincipal iPrincipal) {
+    public static Role buildPublishToTopicRole(Stack stack, String rolePrefix, String topic, List<PolicyStatement> policyStatements, List<IManagedPolicy> managedPolicies, IPrincipal iPrincipal) {
         PolicyStatement iotPolicyStatement = getPublishToTopicPolicyStatement(stack, topic);
 
         List<PolicyStatement> policyStatementList = List.of(iotPolicyStatement)
@@ -24,15 +24,15 @@ public class RoleHelper {
         return buildRoleAssumedByPrincipal(stack, String.join("-", rolePrefix, "role"), policyStatementList, managedPolicies, iPrincipal);
     }
 
-    public static Role buildRoleAssumedByLambda(Construct construct, String roleName, List<PolicyStatement> policyStatements, List<ManagedPolicy> managedPolicies) {
+    public static Role buildRoleAssumedByLambda(Construct construct, String roleName, List<PolicyStatement> policyStatements, List<IManagedPolicy> managedPolicies) {
         return buildRoleAssumedByPrincipal(construct, roleName, policyStatements, managedPolicies, LambdaPolicies.LAMBDA_SERVICE_PRINCIPAL);
     }
 
-    public static Role buildRoleAssumedByIot(Construct construct, String roleName, List<PolicyStatement> policyStatements, List<ManagedPolicy> managedPolicies) {
+    public static Role buildRoleAssumedByIot(Construct construct, String roleName, List<PolicyStatement> policyStatements, List<IManagedPolicy> managedPolicies) {
         return buildRoleAssumedByPrincipal(construct, roleName, policyStatements, managedPolicies, IotPolicies.IOT_SERVICE_PRINCIPAL);
     }
 
-    public static Role buildRoleAssumedByPrincipal(Construct construct, String roleName, List<PolicyStatement> policyStatements, List<ManagedPolicy> managedPolicies, IPrincipal iPrincipal) {
+    public static Role buildRoleAssumedByPrincipal(Construct construct, String roleName, List<PolicyStatement> policyStatements, List<IManagedPolicy> managedPolicies, IPrincipal iPrincipal) {
         List<PolicyStatement> allPolicyStatements = List.of(minimalCloudWatchEventsLoggingPolicy)
                 .appendAll(policyStatements);
 
@@ -52,7 +52,7 @@ public class RoleHelper {
         return new Role(construct, roleName, roleProps);
     }
 
-    public static Role buildPublishToTopicPrefixIotEventRole(Stack stack, String rolePrefix, String topicPrefix, List<PolicyStatement> policyStatements, List<ManagedPolicy> managedPolicies, IPrincipal iPrincipal) {
+    public static Role buildPublishToTopicPrefixIotEventRole(Stack stack, String rolePrefix, String topicPrefix, List<PolicyStatement> policyStatements, List<IManagedPolicy> managedPolicies, IPrincipal iPrincipal) {
         return buildPublishToTopicRole(stack, rolePrefix, topicPrefix + "/*", policyStatements, managedPolicies, iPrincipal);
     }
 }
