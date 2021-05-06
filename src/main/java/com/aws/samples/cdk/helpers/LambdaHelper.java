@@ -105,7 +105,7 @@ public class LambdaHelper {
                 .tracing(Tracing.ACTIVE)
                 .build();
 
-        return new Function(stack, functionNamePrefix + "Lambda", functionProps);
+        return new Function(stack, String.join("-", functionNamePrefix, "lambda"), functionProps);
     }
 
     public static Role getRoleAssumedByLambda(Stack stack, String name, Option<PolicyDocumentProps> policyDocumentPropsOption) {
