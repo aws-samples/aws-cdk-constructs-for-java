@@ -1,5 +1,6 @@
 package com.aws.samples.cdk.helpers;
 
+import org.jetbrains.annotations.NotNull;
 import software.amazon.awscdk.core.Stack;
 import software.amazon.awscdk.services.iot.CfnTopicRule;
 import software.amazon.awscdk.services.iot.CfnTopicRuleProps;
@@ -51,38 +52,22 @@ public class RulesEngineSqlHelper {
     }
 
     public static CfnTopicRule buildIotEventRule(Stack stack, String topicRuleName, Function lambda, String selectClause, String topicFilter) {
-        String quotedTopicFilter = "'" + topicFilter + "'";
+        String quotedTopicFilter = String.join("", "'", topicFilter, "'");
         String sql = String.join(" ", selectClause, "from", quotedTopicFilter);
 
         return buildIotEventRule(stack, topicRuleName, lambda, sql);
     }
 
-    public static CfnTopicRule buildIotEventRule(Stack stack, String topicRuleName, String sql, Function lambda) {
-        CfnTopicRule.ActionProperty actionProperty = CfnTopicRule.ActionProperty.builder()
-                .lambda(CfnTopicRule.LambdaActionProperty.builder()
-                        .functionArn(lambda.getFunctionArn())
-                        .build())
-                .build();
-
-        CfnTopicRule.TopicRulePayloadProperty topicRulePayloadProperty = CfnTopicRule.TopicRulePayloadProperty.builder()
-                .actions(singletonList(actionProperty))
-                .ruleDisabled(false)
-                .sql(sql)
-                .awsIotSqlVersion(AWS_IOT_SQL_VERSION)
-                .build();
-
-        CfnTopicRuleProps cfnTopicRuleProps = CfnTopicRuleProps.builder()
-                .topicRulePayload(topicRulePayloadProperty)
-                .build();
-
-        return new CfnTopicRule(stack, topicRuleName, cfnTopicRuleProps);
-    }
-
     public static CfnTopicRule buildSelectAllIotEventRule(Stack stack, String topicRuleNamePrefix, Function lambda, String topic) {
-        return RulesEngineSqlHelper.buildIotEventRule(stack, topicRuleNamePrefix + "TopicRule", lambda, "select * from '" + topic + "'");
+        return RulesEngineSqlHelper.buildIotEventRule(stack, getTopicRuleName(topicRuleNamePrefix), lambda, "select * from '" + topic + "'");
     }
 
     public static CfnTopicRule buildSelectAllBinaryIotEventRule(Stack stack, String topicRuleNamePrefix, Function lambda, String topic) {
-        return RulesEngineSqlHelper.buildIotEventRule(stack, topicRuleNamePrefix + "TopicRule", lambda, "select encode(*, 'base64') as data from '" + topic + "'");
+        return RulesEngineSqlHelper.buildIotEventRule(stack, getTopicRuleName(topicRuleNamePrefix), lambda, "select encode(*, 'base64') as data from '" + topic + "'");
+    }
+
+    @NotNull
+    private static String getTopicRuleName(String topicRuleNamePrefix) {
+        return String.join("-", topicRuleNamePrefix, "topicrule");
     }
 }

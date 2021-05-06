@@ -5,7 +5,6 @@ import com.aws.samples.cdk.constructs.iam.policies.LambdaPolicies;
 import io.vavr.collection.HashMap;
 import io.vavr.collection.List;
 import io.vavr.collection.Map;
-import org.jetbrains.annotations.NotNull;
 import software.amazon.awscdk.core.Construct;
 import software.amazon.awscdk.core.Stack;
 import software.amazon.awscdk.services.iam.*;
@@ -22,7 +21,7 @@ public class RoleHelper {
                 .appendAll(policyStatements)
                 .append(DESCRIBE_ENDPOINT_POLICY_STATEMENT);
 
-        return buildRoleAssumedByPrincipal(stack, rolePrefix + "Role", policyStatementList, managedPolicies, iPrincipal);
+        return buildRoleAssumedByPrincipal(stack, String.join("-", rolePrefix, "role"), policyStatementList, managedPolicies, iPrincipal);
     }
 
     public static Role buildRoleAssumedByLambda(Construct construct, String roleName, List<PolicyStatement> policyStatements, List<ManagedPolicy> managedPolicies) {

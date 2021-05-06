@@ -121,6 +121,6 @@ public class LambdaHelper {
                 .managedPolicies(Collections.singletonList(ApiGatewayPolicies.getPushToCloudWatchLogsManagedPolicy(stack, name)))
                 .build();
 
-        return new Role(stack, name + "Role", roleProps);
+        return new Role(stack, String.join("-", name , "role"), roleProps);
     }
 }
