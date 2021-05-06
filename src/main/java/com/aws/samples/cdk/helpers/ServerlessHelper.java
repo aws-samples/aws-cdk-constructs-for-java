@@ -50,7 +50,7 @@ public class ServerlessHelper {
     }
 
     private static LambdaRestApi buildLambdaRestApiForRootFunction(Stack stack, Function function) {
-        String apiName = stack.getStackName().replace("-stack", "");
+        String apiName = stack.getStackName().replace("-stack", "-restapi");
 
         return LambdaRestApi.Builder.create(stack, apiName)
                 .restApiName(apiName)
