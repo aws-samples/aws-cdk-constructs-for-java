@@ -11,7 +11,7 @@ publishing.publications.create<MavenPublication>("maven").from(components["java"
 
 java.toolchain.languageVersion.set(JavaLanguageVersion.of(8))
 
-val gradleDependencyVersion = "7.0"
+val gradleDependencyVersion = "7.0.1"
 
 tasks.wrapper {
     gradleVersion = gradleDependencyVersion
