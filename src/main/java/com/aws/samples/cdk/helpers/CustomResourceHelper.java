@@ -19,14 +19,14 @@ import static com.aws.samples.cdk.helpers.ReflectionHelper.findClassesInJarImple
 import static com.aws.samples.cdk.helpers.ReflectionHelper.getLastClassName;
 
 /**
- * Functions that specifically help with creating Lambda functions
+ * Functions that specifically help with creating Lambda backed custom resources
  */
-public class CloudFormationHelper {
+public class CustomResourceHelper {
     public static final String ACTION = "action";
     public static final String CREATE = "create";
     public static final String DELETE = "delete";
     public static final String UPDATE = "update";
-    private static final Logger log = LoggerFactory.getLogger(CloudFormationHelper.class);
+    private static final Logger log = LoggerFactory.getLogger(CustomResourceHelper.class);
     private static final HashMap<String, String> lambdaFunctionCreatePayload = HashMap.of(ACTION, CREATE);
     private static final HashMap<String, String> lambdaFunctionDeletePayload = HashMap.of(ACTION, DELETE);
     private static final HashMap<String, String> lambdaFunctionUpdatePayload = HashMap.of(ACTION, UPDATE);
