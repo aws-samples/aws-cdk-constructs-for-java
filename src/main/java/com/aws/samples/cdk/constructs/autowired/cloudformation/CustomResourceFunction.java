@@ -11,8 +11,8 @@ import java.io.OutputStream;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
+import static com.awslabs.general.helpers.implementations.GsonHelper.fromJson;
 import static com.awslabs.general.helpers.implementations.IoHelper.toByteArray;
-import static com.awslabs.general.helpers.implementations.JsonHelper.fromJson;
 import static io.vavr.API.*;
 import static io.vavr.Predicates.instanceOf;
 

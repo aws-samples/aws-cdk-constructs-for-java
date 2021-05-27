@@ -9,7 +9,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.HttpClientBuilder;
 
-import static com.awslabs.general.helpers.implementations.JsonHelper.toJson;
+import static com.awslabs.general.helpers.implementations.GsonHelper.toJson;
 
 public class CustomResourceResponseSender {
     private final HttpClient httpClient = HttpClientBuilder.create().build();
