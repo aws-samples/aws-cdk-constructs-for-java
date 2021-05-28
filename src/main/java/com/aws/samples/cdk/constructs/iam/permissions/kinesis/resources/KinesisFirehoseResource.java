@@ -5,10 +5,10 @@ import com.aws.samples.cdk.constructs.iam.permissions.SharedPermissions;
 import io.vavr.collection.List;
 import software.amazon.awscdk.core.Fn;
 
-public interface KinesisResource extends IamResource {
+public interface KinesisFirehoseResource extends IamResource {
     default String getIamString() {
         String delimiter = "";
-        List<String> elements = List.of("arn:aws:kinesis:", getRegion(), ":", getAccountId(), ":", getResourceType(), "/", getResourceValue());
+        List<String> elements = List.of("arn:aws:firehose:", getRegion(), ":", getAccountId(), ":", getResourceType(), "/", getResourceValue());
 
         if (SharedPermissions.isRunningInLambda()) {
             // Running inside of Lambda, use a normal string
