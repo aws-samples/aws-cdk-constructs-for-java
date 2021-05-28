@@ -47,6 +47,8 @@ public class SharedPermissions {
     public static final String PRICING_PERMISSION_PREFIX = "pricing";
     public static final String PRICING_ALL = String.join(PERMISSION_DELIMITER, PRICING_PERMISSION_PREFIX, "*");
     public static final String STS_GET_CALLER_IDENTITY_PERMISSION = String.join(PERMISSION_DELIMITER, STS_PERMISSION_PREFIX, "GetCallerIdentity");
+    private static final String KINESIS_PERMISSION_PREFIX = "kinesis";
+    public static final String KINESIS_PUT_RECORD = String.join(PERMISSION_DELIMITER, KINESIS_PERMISSION_PREFIX, "PutRecord");
 
     private static Option<String> accountIdOption = Option.none();
 
