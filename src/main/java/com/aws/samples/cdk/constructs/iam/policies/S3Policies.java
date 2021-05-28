@@ -10,7 +10,7 @@ public class S3Policies {
     public static final String S3_PERMISSION_PREFIX = "s3";
     public static final String S3_PUT_OBJECT_PERMISSION = String.join(":", S3_PERMISSION_PREFIX, "PutObject");
 
-    public PolicyStatement getPutObjectPolicyStatementForBucket(S3Bucket s3Bucket) {
+    public static PolicyStatement getPutObjectPolicyStatementForBucket(S3Bucket s3Bucket) {
         String bucketWildcardResource = String.join("", "arn:aws:s3:::", s3Bucket.bucket(), "/*");
 
         PolicyStatementProps s3PolicyStatementProps = PolicyStatementProps.builder()
