@@ -85,7 +85,7 @@ public class ServerlessHelper {
             }
 
             cumulativePath = cumulativePath.append(currentPath);
-            String cumulativePathString = String.join("-", cumulativePath);
+            String cumulativePathString = String.join("", cumulativePath);
 
             IResource resource = parent.getResource(currentPath);
 

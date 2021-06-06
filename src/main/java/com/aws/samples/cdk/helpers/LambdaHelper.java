@@ -105,7 +105,7 @@ public class LambdaHelper {
                 .tracing(Tracing.ACTIVE)
                 .build();
 
-        return new Function(stack, String.join("-", functionNamePrefix, "lambda"), functionProps);
+        return new Function(stack, String.join("", functionNamePrefix, "Lambda"), functionProps);
     }
 
     public static Role getRoleAssumedByLambda(Stack stack, String name, Option<PolicyDocumentProps> policyDocumentPropsOption) {
@@ -121,6 +121,6 @@ public class LambdaHelper {
                 .managedPolicies(Collections.singletonList(ApiGatewayPolicies.getPushToCloudWatchLogsManagedPolicy(stack, name)))
                 .build();
 
-        return new Role(stack, String.join("-", name , "role"), roleProps);
+        return new Role(stack, String.join("", name , "Role"), roleProps);
     }
 }

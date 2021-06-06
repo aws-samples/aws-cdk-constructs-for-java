@@ -68,7 +68,7 @@ public class IotHelper {
     }
 
     private static String getPermissionName(String prefix) {
-        return String.join("-", prefix, IOT_LAMBDA_PERMISSIONS);
+        return String.join("", prefix, IOT_LAMBDA_PERMISSIONS);
     }
 
     @NotNull
@@ -153,7 +153,7 @@ public class IotHelper {
                 .timeout(LambdaHelper.DEFAULT_LAMBDA_FUNCTION_TIMEOUT)
                 .runtime(Runtime.JAVA_11)
                 .role(role)
-                .functionName(String.join("-", stack.getStackName(), clazz.getSimpleName()))
+                .functionName(String.join("", stack.getStackName(), clazz.getSimpleName()))
                 .tracing(Tracing.ACTIVE)
                 .build();
 

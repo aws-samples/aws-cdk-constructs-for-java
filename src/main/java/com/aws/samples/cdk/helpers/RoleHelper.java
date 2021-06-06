@@ -22,7 +22,7 @@ public class RoleHelper {
                 .appendAll(policyStatements)
                 .append(DESCRIBE_ENDPOINT_POLICY_STATEMENT);
 
-        return buildRoleAssumedByPrincipal(stack, String.join("-", rolePrefix, "role"), policyStatementList, managedPolicies, iPrincipal);
+        return buildRoleAssumedByPrincipal(stack, String.join("", rolePrefix, "Role"), policyStatementList, managedPolicies, iPrincipal);
     }
 
     public static Role buildRoleAssumedByLambda(Construct construct, String roleName, List<PolicyStatement> policyStatements, List<IManagedPolicy> managedPolicies) {

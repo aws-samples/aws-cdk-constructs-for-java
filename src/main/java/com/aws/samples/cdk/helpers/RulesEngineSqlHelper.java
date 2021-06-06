@@ -68,6 +68,6 @@ public class RulesEngineSqlHelper {
 
     @NotNull
     private static String getTopicRuleName(String topicRuleNamePrefix) {
-        return String.join("-", topicRuleNamePrefix, "topicrule");
+        return String.join("", topicRuleNamePrefix, "TopicRule");
     }
 }
