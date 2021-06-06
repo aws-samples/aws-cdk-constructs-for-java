@@ -1,12 +1,12 @@
 package com.aws.samples.cdk.constructs.iam.permissions;
 
+import io.vavr.control.Option;
 import org.jetbrains.annotations.NotNull;
 import software.amazon.awscdk.services.iam.Effect;
 import software.amazon.awscdk.services.iam.PolicyStatement;
 import software.amazon.awscdk.services.iam.PolicyStatementProps;
 import software.amazon.awssdk.core.SdkSystemSetting;
 import software.amazon.awssdk.services.sts.StsClient;
-import io.vavr.control.Option;
 
 import static java.util.Collections.singletonList;
 
@@ -14,6 +14,8 @@ public class SharedPermissions {
     public static final String ALL_RESOURCES = "*";
     public static final IamResource IAM_ALL_RESOURCES = () -> ALL_RESOURCES;
     public static final String PERMISSION_DELIMITER = ":";
+    public static final String PRICING_PERMISSION_PREFIX = "pricing";
+    public static final String PRICING_ALL = String.join(PERMISSION_DELIMITER, PRICING_PERMISSION_PREFIX, "*");
     private static final String DYNAMODB_PERMISSION_PREFIX = "dynamodb";
     public static final String DYNAMODB_GET_ITEM_PERMISSION = String.join(PERMISSION_DELIMITER, DYNAMODB_PERMISSION_PREFIX, "GetItem");
     public static final String DYNAMODB_PUT_ITEM_PERMISSION = String.join(PERMISSION_DELIMITER, DYNAMODB_PERMISSION_PREFIX, "PutItem");
@@ -44,11 +46,11 @@ public class SharedPermissions {
     public static final String CLOUDWATCH_LOGS_DESCRIBE_LOG_STREAMS = String.join(PERMISSION_DELIMITER, CLOUDWATCH_LOGS_PERMISSION_PREFIX, "DescribeLogStreams");
     private static final String STS_PERMISSION_PREFIX = "sts";
     public static final String STS_ASSUME_ROLE = String.join(PERMISSION_DELIMITER, STS_PERMISSION_PREFIX, "AssumeRole");
-    public static final String PRICING_PERMISSION_PREFIX = "pricing";
-    public static final String PRICING_ALL = String.join(PERMISSION_DELIMITER, PRICING_PERMISSION_PREFIX, "*");
     public static final String STS_GET_CALLER_IDENTITY_PERMISSION = String.join(PERMISSION_DELIMITER, STS_PERMISSION_PREFIX, "GetCallerIdentity");
     private static final String KINESIS_PERMISSION_PREFIX = "kinesis";
     public static final String KINESIS_PUT_RECORD = String.join(PERMISSION_DELIMITER, KINESIS_PERMISSION_PREFIX, "PutRecord");
+    private static final String FIREHOSE_PERMISSION_PREFIX = "firehose";
+    public static final String FIREHOSE_PUT_RECORD = String.join(PERMISSION_DELIMITER, FIREHOSE_PERMISSION_PREFIX, "PutRecord");
 
     private static Option<String> accountIdOption = Option.none();
 
