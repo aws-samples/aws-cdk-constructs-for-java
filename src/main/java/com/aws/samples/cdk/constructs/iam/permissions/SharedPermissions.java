@@ -51,6 +51,8 @@ public class SharedPermissions {
     public static final String KINESIS_PUT_RECORD = String.join(PERMISSION_DELIMITER, KINESIS_PERMISSION_PREFIX, "PutRecord");
     private static final String FIREHOSE_PERMISSION_PREFIX = "firehose";
     public static final String FIREHOSE_PUT_RECORD = String.join(PERMISSION_DELIMITER, FIREHOSE_PERMISSION_PREFIX, "PutRecord");
+    private static final String IAM_PERMISSION_PREFIX = "iam";
+    public static final String IAM_GET_ROLE_PERMISSION = String.join(PERMISSION_DELIMITER, IAM_PERMISSION_PREFIX, "GetRole");
 
     private static Option<String> accountIdOption = Option.none();
 
