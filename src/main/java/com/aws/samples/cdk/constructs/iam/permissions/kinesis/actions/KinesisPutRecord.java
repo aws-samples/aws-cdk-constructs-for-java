@@ -11,13 +11,13 @@ import org.immutables.value.Value;
 
 @Gson.TypeAdapters
 @Value.Immutable
-public abstract class PutRecord implements IamPermission {
+public abstract class KinesisPutRecord implements IamPermission {
     @Override
     public Tuple2<IamAction, IamResource> getActionAndResource() {
         IamAction iamAction = new IamAction() {
             @Override
             public String getIamString() {
-                return SharedPermissions.LAMBDA_INVOKE_FUNCTION;
+                return SharedPermissions.KINESIS_PUT_RECORD;
             }
 
             @Override

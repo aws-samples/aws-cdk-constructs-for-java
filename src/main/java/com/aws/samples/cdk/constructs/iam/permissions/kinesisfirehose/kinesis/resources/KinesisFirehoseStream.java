@@ -1,4 +1,4 @@
-package com.aws.samples.cdk.constructs.iam.permissions.kinesis.resources;
+package com.aws.samples.cdk.constructs.iam.permissions.kinesisfirehose.kinesis.resources;
 
 import org.immutables.gson.Gson;
 import org.immutables.value.Value;
