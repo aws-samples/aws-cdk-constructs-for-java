@@ -3,6 +3,7 @@ package com.aws.samples.cdk.helpers;
 import com.aws.samples.cdk.constructs.iam.policies.IotPolicies;
 import com.aws.samples.cdk.constructs.iam.policies.KinesisPolicies;
 import com.aws.samples.cdk.constructs.iam.policies.LambdaPolicies;
+import com.aws.samples.cdk.constructs.iam.policies.SystemsManagerPolicies;
 import io.vavr.collection.HashMap;
 import io.vavr.collection.List;
 import io.vavr.collection.Map;
@@ -31,6 +32,10 @@ public class RoleHelper {
 
     public static Role buildRoleAssumedByFirehose(Construct construct, String roleName, List<PolicyStatement> policyStatements, List<IManagedPolicy> managedPolicies) {
         return buildRoleAssumedByPrincipal(construct, roleName, policyStatements, managedPolicies, KinesisPolicies.FIREHOSE_SERVICE_PRINCIPAL);
+    }
+
+    public static Role buildRoleAssumedBySystemsManager(Construct construct, String roleName, List<PolicyStatement> policyStatements, List<IManagedPolicy> managedPolicies) {
+        return buildRoleAssumedByPrincipal(construct, roleName, policyStatements, managedPolicies, SystemsManagerPolicies.SYSTEMS_MANAGER_SERVICE_PRINCIPAL);
     }
 
     public static Role buildRoleAssumedByKinesis(Construct construct, String roleName, List<PolicyStatement> policyStatements, List<IManagedPolicy> managedPolicies) {

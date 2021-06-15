@@ -9,7 +9,6 @@ import software.amazon.awscdk.services.iam.ServicePrincipal;
 import java.util.Collections;
 
 import static com.aws.samples.cdk.constructs.iam.permissions.SharedPermissions.FIREHOSE_PUT_RECORD;
-import static com.aws.samples.cdk.constructs.iam.permissions.SharedPermissions.KINESIS_PUT_RECORD;
 
 public class KinesisPolicies {
     public static final ServicePrincipal FIREHOSE_SERVICE_PRINCIPAL = new ServicePrincipal("firehose");
