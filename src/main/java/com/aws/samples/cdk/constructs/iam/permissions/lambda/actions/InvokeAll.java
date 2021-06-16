@@ -1,4 +1,4 @@
-package com.aws.samples.cdk.constructs.iam.permissions.lambda;
+package com.aws.samples.cdk.constructs.iam.permissions.lambda.actions;
 
 import com.aws.samples.cdk.constructs.iam.permissions.IamAction;
 import com.aws.samples.cdk.constructs.iam.permissions.IamPermission;

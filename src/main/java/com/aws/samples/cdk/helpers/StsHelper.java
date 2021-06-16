@@ -16,12 +16,12 @@ public class StsHelper {
 
     @NotNull
     public static PolicyStatement getAssumeRolePolicyStatement(Option<Role> roleOption) {
-        PolicyStatementProps iotPolicyStatementProps = PolicyStatementProps.builder()
+        PolicyStatementProps policyStatementProps = PolicyStatementProps.builder()
                 .effect(Effect.ALLOW)
                 .resources(List.of(roleOption.map(Role::getRoleArn).getOrElse(ALL_RESOURCES)).asJava())
                 .actions(List.of(STS_ASSUME_ROLE).asJava())
                 .build();
 
-        return new PolicyStatement(iotPolicyStatementProps);
+        return new PolicyStatement(policyStatementProps);
     }
 }
