@@ -47,6 +47,7 @@ public class SharedPermissions {
     private static final String STS_PERMISSION_PREFIX = "sts";
     public static final String STS_ASSUME_ROLE = String.join(PERMISSION_DELIMITER, STS_PERMISSION_PREFIX, "AssumeRole");
     public static final String STS_GET_CALLER_IDENTITY_PERMISSION = String.join(PERMISSION_DELIMITER, STS_PERMISSION_PREFIX, "GetCallerIdentity");
+    public static final String STS_GET_FEDERATION_TOKEN_PERMISSION = String.join(PERMISSION_DELIMITER, STS_PERMISSION_PREFIX, "GetFederationToken");
     private static final String KINESIS_PERMISSION_PREFIX = "kinesis";
     public static final String KINESIS_PUT_RECORD = String.join(PERMISSION_DELIMITER, KINESIS_PERMISSION_PREFIX, "PutRecord");
     private static final String FIREHOSE_PERMISSION_PREFIX = "firehose";
