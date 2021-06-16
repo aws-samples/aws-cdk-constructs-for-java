@@ -53,18 +53,20 @@ public class SharedPermissions {
     public static final String FIREHOSE_PUT_RECORD = String.join(PERMISSION_DELIMITER, FIREHOSE_PERMISSION_PREFIX, "PutRecord");
     private static final String IAM_PERMISSION_PREFIX = "iam";
     public static final String IAM_GET_ROLE_PERMISSION = String.join(PERMISSION_DELIMITER, IAM_PERMISSION_PREFIX, "GetRole");
+    private static final String SSM_PERMISSION_PREFIX = "ssm";
+    public static final String SSM_DESCRIBE_INSTANCE_INFORMATION_PERMISSION = String.join(PERMISSION_DELIMITER, SSM_PERMISSION_PREFIX, "DescribeInstanceInformation");
 
     private static Option<String> accountIdOption = Option.none();
 
     @NotNull
     public static PolicyStatement getAllowAllPolicyStatement(String action) {
-        PolicyStatementProps iotPolicyStatementProps = PolicyStatementProps.builder()
+        PolicyStatementProps policyStatementProps = PolicyStatementProps.builder()
                 .effect(Effect.ALLOW)
                 .resources(singletonList(ALL_RESOURCES))
                 .actions(singletonList(action))
                 .build();
 
-        return new PolicyStatement(iotPolicyStatementProps);
+        return new PolicyStatement(policyStatementProps);
     }
 
     public static String getAccountId() {
