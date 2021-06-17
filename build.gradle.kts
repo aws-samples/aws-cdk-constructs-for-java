@@ -30,7 +30,7 @@ group = "local"
 version = "1.0-SNAPSHOT"
 
 // Specify all of our dependency versions
-val awsCdkVersion = "1.103.0"
+val awsCdkVersion = "1.109.0"
 val awsSdkVersion = "2.16.72"
 val vavrVersion = "0.10.3"
 val commonsLangVersion = "3.12.0"
