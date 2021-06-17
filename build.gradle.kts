@@ -7,7 +7,12 @@ plugins {
     id("maven-publish")
 }
 
-publishing.publications.create<MavenPublication>("maven").from(components["java"])
+publishing.publications.create<MavenPublication>("maven") {
+    groupId = "local"
+    version = "1.0-SNAPSHOT"
+
+    from(components["java"])
+}
 
 java.toolchain.languageVersion.set(JavaLanguageVersion.of(8))
 
