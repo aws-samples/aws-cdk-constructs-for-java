@@ -70,9 +70,26 @@ public class ReflectionHelper {
 
     private static List<PolicyStatement> getPolicyStatementsForClass(File file, String name) {
         return instantiateHasIamPermissions(file, name)
+                .onFailure(Exception.class, exception -> ReflectionHelper.logAndThrow(exception, file))
                 .map(HasIamPermissions::getPermissions)
                 .getOrElseGet(throwable -> List.empty())
                 .map(IamPermission::getPolicyStatement);
+    }
+
+    private static void logAndThrow(Exception exception, File file) {
+        exception.printStackTrace();
+
+        // Sleep for 1 second to let the stack trace flush
+        Try.run(() -> Thread.sleep(1000));
+
+        log.error("-- ATTENTION ATTENTION ATTENTION ATTENTION ATTENTION ATTENTION ATTENTION ATTENTION --");
+        log.error("");
+        log.error("Failed to instantiate the class from [" + file.getAbsolutePath() + "], this may be caused by static fields throwing exceptions (e.g. looking for Lambda environment variables outside of the Lambda runtime environment)");
+        log.error("If the class needs to do this at runtime try wrapping the calls in Lazy.of(() -> ...) so they're only evaluated at runtime.");
+        log.error("");
+        log.error("-- ATTENTION ATTENTION ATTENTION ATTENTION ATTENTION ATTENTION ATTENTION ATTENTION --");
+
+        System.exit(1);
     }
 
     public static Option<PolicyDocumentProps> getPolicyDocumentForClassOption(File file, String name) {
