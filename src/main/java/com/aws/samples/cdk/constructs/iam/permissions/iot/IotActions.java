@@ -8,6 +8,8 @@ import com.aws.samples.cdk.constructs.iam.permissions.iot.dataplane.resources.To
 public class IotActions {
     public static DescribeEndpoint describeEndpoint = ImmutableDescribeEndpoint.builder().build();
 
+    public static SearchIndex searchIndex = ImmutableSearchIndex.builder().build();
+
     public static Publish publish(Topic topic) {
         return ImmutablePublish.builder().topic(topic).build();
     }
