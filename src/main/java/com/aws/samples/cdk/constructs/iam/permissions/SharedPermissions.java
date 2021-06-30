@@ -56,6 +56,7 @@ public class SharedPermissions {
     public static final String IAM_GET_ROLE_PERMISSION = String.join(PERMISSION_DELIMITER, IAM_PERMISSION_PREFIX, "GetRole");
     private static final String SSM_PERMISSION_PREFIX = "ssm";
     public static final String SSM_DESCRIBE_INSTANCE_INFORMATION_PERMISSION = String.join(PERMISSION_DELIMITER, SSM_PERMISSION_PREFIX, "DescribeInstanceInformation");
+    public static final String SSM_DESCRIBE_ACTIVATIONS_PERMISSION = String.join(PERMISSION_DELIMITER, SSM_PERMISSION_PREFIX, "DescribeActivations");
 
     private static Option<String> accountIdOption = Option.none();
 
