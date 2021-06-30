@@ -16,7 +16,7 @@ publishing.publications.create<MavenPublication>("maven") {
 
 java.toolchain.languageVersion.set(JavaLanguageVersion.of(8))
 
-val gradleDependencyVersion = "7.0.2"
+val gradleDependencyVersion = "7.1"
 
 tasks.wrapper {
     gradleVersion = gradleDependencyVersion
@@ -30,13 +30,13 @@ group = "local"
 version = "1.0-SNAPSHOT"
 
 // Specify all of our dependency versions
-val awsCdkVersion = "1.103.0"
+val awsCdkVersion = "1.109.0"
 val awsSdkVersion = "2.16.72"
 val vavrVersion = "0.10.3"
 val commonsLangVersion = "3.12.0"
-val commonsIoVersion = "2.8.0"
+val commonsIoVersion = "2.10.0"
 val ztZipVersion = "1.14"
-val resultsIteratorForAwsJavaSdkVersion = "28.0.4"
+val resultsIteratorForAwsJavaSdkVersion = "29.0.9"
 val junitVersion = "4.13.2"
 val autoServiceVersion = "1.0"
 val javaPoetVersion = "1.13.0"
