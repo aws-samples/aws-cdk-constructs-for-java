@@ -1,5 +1,5 @@
 plugins {
-    kotlin("jvm") version "1.5.10"
+    kotlin("jvm") version "1.5.21"
     id("application")
     id("java")
     id("idea")
@@ -16,7 +16,7 @@ publishing.publications.create<MavenPublication>("maven") {
 
 java.toolchain.languageVersion.set(JavaLanguageVersion.of(8))
 
-val gradleDependencyVersion = "7.0.2"
+val gradleDependencyVersion = "7.1.1"
 
 tasks.wrapper {
     gradleVersion = gradleDependencyVersion
@@ -30,19 +30,19 @@ group = "local"
 version = "1.0-SNAPSHOT"
 
 // Specify all of our dependency versions
-val awsCdkVersion = "1.109.0"
-val awsSdkVersion = "2.16.93"
+val awsCdkVersion = "1.113.0"
+val awsSdkVersion = "2.17.23"
 val vavrVersion = "0.10.3"
 val commonsLangVersion = "3.12.0"
 val commonsIoVersion = "2.10.0"
 val ztZipVersion = "1.14"
-val resultsIteratorForAwsJavaSdkVersion = "29.0.9"
+val resultsIteratorForAwsJavaSdkVersion = "29.0.14"
 val junitVersion = "4.13.2"
 val autoServiceVersion = "1.0"
 val javaPoetVersion = "1.13.0"
 val immutablesValueVersion = "2.8.9-ea-1"
 val awsLambdaJavaCoreVersion = "1.2.1"
-val awsLambdaServletVersion = "0.3.5"
+val awsLambdaServletVersion = "0.3.7"
 val log4jVersion = "2.14.1"
 
 repositories {
