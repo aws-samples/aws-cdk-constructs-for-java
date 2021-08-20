@@ -6,9 +6,17 @@ import software.amazon.awscdk.core.Fn;
 import software.amazon.awssdk.core.SdkSystemSetting;
 
 public interface IamResource {
+    default String getResourceTypeSeparator() {
+        return ":";
+    }
+
+    default String getResourceValueSeparator() {
+        return "/";
+    }
+
     default String getIamString() {
         String delimiter = "";
-        List<String> elements = List.of("arn:aws:", getServiceIdentifier(), ":", getRegion(), ":", getAccountId(), ":", getResourceType(), "/", getResourceValue());
+        List<String> elements = List.of("arn:aws:", getServiceIdentifier(), ":", getRegion(), ":", getAccountId(), getResourceTypeSeparator(), getResourceType(), getResourceValueSeparator(), getResourceValue());
 
         if (SharedPermissions.isRunningInLambda()) {
             // Running inside of Lambda, use a normal string
