@@ -82,6 +82,8 @@ dependencies {
     implementation("com.amazonaws:aws-lambda-java-core:$awsLambdaJavaCoreVersion")
     api("com.github.aws-samples:aws-lambda-servlet:$awsLambdaServletVersion")
 
+    implementation("org.gradle:gradle-tooling-api:$gradleDependencyVersion")
+
     testImplementation("junit:junit:$junitVersion")
 
     // To force dependabot to update the Gradle wrapper dependency
