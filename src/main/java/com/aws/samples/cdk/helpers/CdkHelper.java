@@ -1,12 +1,14 @@
 package com.aws.samples.cdk.helpers;
 
 import com.aws.samples.cdk.annotations.processors.CdkAutoWireProcessor;
+import io.vavr.Lazy;
 import io.vavr.Tuple;
 import io.vavr.collection.HashMap;
 import io.vavr.collection.List;
 import io.vavr.collection.Map;
 import io.vavr.control.Option;
 import io.vavr.control.Try;
+import software.amazon.awscdk.core.App;
 
 import java.io.*;
 import java.math.BigInteger;
@@ -26,6 +28,12 @@ public class CdkHelper {
 
     public static void setStackName(String stackName) {
         CdkHelper.stackName = Option.of(stackName);
+    }
+
+    private static Lazy<App> lazyApp = Lazy.of(App::new);
+
+    public static App getApp() {
+        return lazyApp.get();
     }
 
     public static Map<String, String> getArguments() {
