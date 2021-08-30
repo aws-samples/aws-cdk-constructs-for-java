@@ -3,6 +3,7 @@ package com.aws.samples.cdk.helpers;
 import com.aws.samples.cdk.annotations.processors.CdkAutoWireProcessor;
 import io.vavr.Lazy;
 import io.vavr.Tuple;
+import io.vavr.collection.CharSeq;
 import io.vavr.collection.HashMap;
 import io.vavr.collection.List;
 import io.vavr.collection.Map;
@@ -22,15 +23,27 @@ import java.util.zip.ZipEntry;
 
 public class CdkHelper {
     public static final String NO_SEPARATOR = "";
-    private static Option<String> stackName = Option.none();
-    private static Option<Random> random = Option.none();
+    private static Option<String> stackNameOption = Option.none();
+    private static Lazy<Random> lazyRandom = Lazy.of(() -> new Random(UUID.nameUUIDFromBytes(CdkHelper.getStackName().getBytes()).getLeastSignificantBits()));
     private static Map<String, String> arguments = HashMap.ofAll(Option.of(System.getenv()).getOrElse(java.util.HashMap::new));
 
     public static void setStackName(String stackName) {
-        CdkHelper.stackName = Option.of(stackName);
+        if (!stackName.isEmpty()) {
+            throw new RuntimeException("Stack name already set [" + stackName + "]. It can not be changed.");
+        }
+
+        CdkHelper.stackNameOption = Option.of(stackName);
     }
 
-    private static Lazy<App> lazyApp = Lazy.of(App::new);
+    public static String getStackName() {
+        if (stackNameOption.isEmpty()) {
+            setStackName(camelCaseToKebabCase(getMainClassName()));
+        }
+
+        return stackNameOption.get();
+    }
+
+    private static final Lazy<App> lazyApp = Lazy.of(App::new);
 
     public static App getApp() {
         return lazyApp.get();
@@ -45,13 +58,9 @@ public class CdkHelper {
     }
 
     private static Long nextRandomLong() {
-        if (random.isEmpty()) {
-            stackName.getOrElseThrow(() -> new RuntimeException("Stack name must be present"));
+        stackNameOption.getOrElseThrow(() -> new RuntimeException("Stack name must be present"));
 
-            random = Option.of(new Random(UUID.nameUUIDFromBytes(CdkHelper.stackName.get().getBytes()).getLeastSignificantBits()));
-        }
-
-        return random.get().nextLong();
+        return lazyRandom.get().nextLong();
     }
 
     public static String getJarFileHash(File file) {
@@ -112,5 +121,36 @@ public class CdkHelper {
                 .map(List::ofAll)
                 // If we threw an exception then just return an empty list
                 .getOrElse(List.empty());
+    }
+
+    public static String camelCaseToKebabCase(String camelCase) {
+        return CharSeq.of(camelCase)
+                .map(CdkHelper::charToKebab)
+                .fold("", (a1, a2) -> a1 + a2);
+    }
+
+    private static String charToKebab(char value) {
+        if (!Character.isUpperCase(value)) {
+            return String.valueOf(value);
+        }
+
+        return "_" + Character.toLowerCase(value);
+    }
+
+    // Guidance from: https://stackoverflow.com/a/36949543/796579
+    private static String getMainClassName() {
+        StackTraceElement[] trace = Thread.currentThread().getStackTrace();
+
+        if (trace.length <= 0) {
+            return "Unknown";
+        }
+
+        String className = trace[trace.length - 1].getClassName();
+
+        if (!className.contains(".")) {
+            return className;
+        }
+
+        return className.substring(className.lastIndexOf(".") + 1);
     }
 }
