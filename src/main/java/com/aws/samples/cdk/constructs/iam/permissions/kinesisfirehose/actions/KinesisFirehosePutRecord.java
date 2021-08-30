@@ -18,7 +18,7 @@ public abstract class KinesisFirehosePutRecord implements IamPermission {
         IamAction iamAction = new IamAction() {
             @Override
             public String getIamString() {
-                return SharedPermissions.KINESIS_PUT_RECORD;
+                return SharedPermissions.FIREHOSE_PUT_RECORD;
             }
 
             @Override
