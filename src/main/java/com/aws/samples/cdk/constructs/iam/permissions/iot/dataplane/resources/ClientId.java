@@ -5,7 +5,7 @@ import org.immutables.value.Value;
 
 @Gson.TypeAdapters
 @Value.Immutable
-public abstract class ClientId implements IotDataPlaneResource {
+public abstract class ClientId implements IotResource {
     public abstract String getClientId();
 
     @Override

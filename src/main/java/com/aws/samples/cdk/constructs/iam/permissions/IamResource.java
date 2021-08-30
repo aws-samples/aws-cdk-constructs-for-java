@@ -28,7 +28,7 @@ public interface IamResource {
     }
 
     default String getServiceIdentifier() {
-        return null;
+        throw new RuntimeException("Service identifier has not been defined for this resource. This is a bug in [" + this.getClass().getSimpleName() + "]");
     }
 
     default String getAccountId() {

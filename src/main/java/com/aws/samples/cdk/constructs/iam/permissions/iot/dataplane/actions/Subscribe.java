@@ -1,7 +1,7 @@
 package com.aws.samples.cdk.constructs.iam.permissions.iot.dataplane.actions;
 
 import com.aws.samples.cdk.constructs.iam.permissions.iot.dataplane.resources.TopicFilter;
-import com.aws.samples.cdk.constructs.iam.permissions.iot.dataplane.resources.IotDataPlaneResource;
+import com.aws.samples.cdk.constructs.iam.permissions.iot.dataplane.resources.IotResource;
 import org.immutables.gson.Gson;
 import org.immutables.value.Value;
 
@@ -18,7 +18,7 @@ public abstract class Subscribe implements IotDataPlaneAction {
     }
 
     @Override
-    public IotDataPlaneResource getResource() {
+    public IotResource getResource() {
         return getTopicFilter();
     }
 }

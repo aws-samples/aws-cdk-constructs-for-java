@@ -12,7 +12,6 @@ import static java.util.Collections.singletonList;
 
 public class SharedPermissions {
     public static final String ALL_RESOURCES = "*";
-    public static final IamResource IAM_ALL_RESOURCES = () -> ALL_RESOURCES;
     public static final String PERMISSION_DELIMITER = ":";
     public static final String PRICING_PERMISSION_PREFIX = "pricing";
     public static final String PRICING_ALL = String.join(PERMISSION_DELIMITER, PRICING_PERMISSION_PREFIX, "*");

@@ -5,7 +5,7 @@ import org.immutables.value.Value;
 
 @Gson.TypeAdapters
 @Value.Immutable
-public abstract class TopicFilter implements IotDataPlaneResource {
+public abstract class TopicFilter implements IotResource {
     public abstract String getTopicFilter();
 
     @Override

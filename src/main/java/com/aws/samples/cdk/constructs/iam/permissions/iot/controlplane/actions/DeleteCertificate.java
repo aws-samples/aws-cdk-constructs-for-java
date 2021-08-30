@@ -4,6 +4,7 @@ import com.aws.samples.cdk.constructs.iam.permissions.IamAction;
 import com.aws.samples.cdk.constructs.iam.permissions.IamPermission;
 import com.aws.samples.cdk.constructs.iam.permissions.IamResource;
 import com.aws.samples.cdk.constructs.iam.permissions.SharedPermissions;
+import com.aws.samples.cdk.constructs.iam.permissions.iot.dataplane.resources.IotAllResources;
 import io.vavr.Tuple;
 import io.vavr.Tuple2;
 import org.immutables.gson.Gson;
@@ -22,7 +23,7 @@ public abstract class DeleteCertificate implements IamPermission {
 
             @Override
             public IamResource getIamResource() {
-                return SharedPermissions.IAM_ALL_RESOURCES;
+                return new IotAllResources();
             }
         };
 

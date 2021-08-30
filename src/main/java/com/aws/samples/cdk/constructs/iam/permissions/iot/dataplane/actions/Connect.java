@@ -2,7 +2,7 @@ package com.aws.samples.cdk.constructs.iam.permissions.iot.dataplane.actions;
 
 import com.aws.samples.cdk.constructs.iam.permissions.SharedPermissions;
 import com.aws.samples.cdk.constructs.iam.permissions.iot.dataplane.resources.ClientId;
-import com.aws.samples.cdk.constructs.iam.permissions.iot.dataplane.resources.IotDataPlaneResource;
+import com.aws.samples.cdk.constructs.iam.permissions.iot.dataplane.resources.IotResource;
 import org.immutables.gson.Gson;
 import org.immutables.value.Value;
 
@@ -17,7 +17,7 @@ public abstract class Connect implements IotDataPlaneAction {
     }
 
     @Override
-    public IotDataPlaneResource getResource() {
+    public IotResource getResource() {
         return getClientId();
     }
 }

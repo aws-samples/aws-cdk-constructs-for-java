@@ -12,11 +12,11 @@ import static com.aws.samples.cdk.constructs.iam.permissions.SharedPermissions.I
 
 public class IotPolicies {
     public static final ServicePrincipal IOT_SERVICE_PRINCIPAL = new ServicePrincipal("iot");
-    private static final PolicyStatementProps sqsPolicyStatementProps = PolicyStatementProps.builder()
+    private static final PolicyStatementProps SEARCH_INDEX_STATEMENT_PROPS = PolicyStatementProps.builder()
             .effect(Effect.ALLOW)
             .resources(Collections.singletonList(ALL_RESOURCES))
             .actions(Collections.singletonList(IOT_SEARCH_INDEX_PERMISSION))
             .build();
 
-    public static final PolicyStatement searchIndexPolicyStatement = new PolicyStatement(sqsPolicyStatementProps);
+    public static final PolicyStatement searchIndexPolicyStatement = new PolicyStatement(SEARCH_INDEX_STATEMENT_PROPS);
 }
