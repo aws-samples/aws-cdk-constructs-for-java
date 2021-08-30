@@ -1,6 +1,6 @@
 package com.aws.samples.cdk.constructs.iam.policies;
 
-import com.aws.samples.cdk.constructs.iam.permissions.kinesisfirehose.kinesis.resources.KinesisFirehoseStream;
+import com.aws.samples.cdk.constructs.iam.permissions.kinesisfirehose.resources.KinesisFirehoseStream;
 import software.amazon.awscdk.services.iam.Effect;
 import software.amazon.awscdk.services.iam.PolicyStatement;
 import software.amazon.awscdk.services.iam.PolicyStatementProps;

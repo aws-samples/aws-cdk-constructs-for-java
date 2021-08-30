@@ -1,4 +1,4 @@
-package com.aws.samples.cdk.constructs.iam.permissions.kinesisfirehose.kinesis.resources;
+package com.aws.samples.cdk.constructs.iam.permissions.kinesisfirehose.resources;
 
 import com.aws.samples.cdk.constructs.iam.permissions.IamResource;
 import com.aws.samples.cdk.constructs.iam.permissions.SharedPermissions;

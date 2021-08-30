@@ -1,10 +1,10 @@
-package com.aws.samples.cdk.constructs.iam.permissions.kinesisfirehose.kinesis.actions;
+package com.aws.samples.cdk.constructs.iam.permissions.kinesisfirehose.actions;
 
 import com.aws.samples.cdk.constructs.iam.permissions.IamAction;
 import com.aws.samples.cdk.constructs.iam.permissions.IamPermission;
 import com.aws.samples.cdk.constructs.iam.permissions.IamResource;
 import com.aws.samples.cdk.constructs.iam.permissions.SharedPermissions;
-import com.aws.samples.cdk.constructs.iam.permissions.kinesisfirehose.kinesis.resources.KinesisFirehoseAllResources;
+import com.aws.samples.cdk.constructs.iam.permissions.kinesisfirehose.resources.KinesisFirehoseAllResources;
 import io.vavr.Tuple;
 import io.vavr.Tuple2;
 import org.immutables.gson.Gson;
