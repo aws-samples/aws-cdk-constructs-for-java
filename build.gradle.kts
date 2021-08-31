@@ -16,7 +16,8 @@ publishing.publications.create<MavenPublication>("maven") {
 
 java.toolchain.languageVersion.set(JavaLanguageVersion.of(8))
 
-val gradleDependencyVersion = "7.1.1"
+val gradleDependencyVersion = "7.2"
+val gradleToolingApiDependencyVersion = "7.1.1"
 
 tasks.wrapper {
     gradleVersion = gradleDependencyVersion
@@ -36,7 +37,7 @@ val vavrVersion = "0.10.4"
 val commonsLangVersion = "3.12.0"
 val commonsIoVersion = "2.11.0"
 val ztZipVersion = "1.14"
-val resultsIteratorForAwsJavaSdkVersion = "29.0.17"
+val resultsIteratorForAwsJavaSdkVersion = "29.0.18"
 val junitVersion = "4.13.2"
 val autoServiceVersion = "1.0"
 val javaPoetVersion = "1.13.0"
@@ -82,10 +83,8 @@ dependencies {
     implementation("com.amazonaws:aws-lambda-java-core:$awsLambdaJavaCoreVersion")
     api("com.github.aws-samples:aws-lambda-servlet:$awsLambdaServletVersion")
 
-    implementation("org.gradle:gradle-tooling-api:$gradleDependencyVersion")
+    // For Gradle build support
+    implementation("org.gradle:gradle-tooling-api:$gradleToolingApiDependencyVersion")
 
     testImplementation("junit:junit:$junitVersion")
-
-    // To force dependabot to update the Gradle wrapper dependency
-    testImplementation("org.gradle:gradle-tooling-api:$gradleDependencyVersion")
 }
