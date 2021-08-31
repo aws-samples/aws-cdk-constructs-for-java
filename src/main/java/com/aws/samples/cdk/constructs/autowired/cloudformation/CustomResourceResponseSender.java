@@ -18,6 +18,13 @@ public class CustomResourceResponseSender {
         Context context = customResourceResponse.getContext();
         LambdaLogger logger = context.getLogger();
         String body = toJson(customResourceResponse);
+
+        if (body.length() > 4096) {
+            // Too long for a CF response, this will fail. Log it.
+            logger.log("Response object is more than 4k. This response will fail. Response content is below.");
+            logger.log(body);
+        }
+
         StringEntity bodyStringEntity = Try.of(() -> new StringEntity(body)).getOrElseThrow(() -> new RuntimeException("Could not convert body to a StringEntity"));
 
         HttpPut httpPut = new HttpPut(customResourceResponse.getCustomResourceRequest().getResponseURL());
