@@ -124,8 +124,27 @@ public class CdkHelper {
     }
 
     public static String camelCaseToKebabCase(String camelCase) {
-        return CharSeq.of(camelCase)
+        if ((camelCase == null) || (camelCase.length() == 0)) {
+            // Nothing to do
+            return camelCase;
+        }
+
+        // First character must be forced to lower case to work with class names
+        String output = camelCase.substring(0, 1).toLowerCase();
+
+        if (camelCase.length() == 1) {
+            // Nothing more to do if it is only one character long
+            return output;
+        }
+
+        // Add the rest of the input string back
+        output = output + camelCase.substring(1);
+
+        return CharSeq.of(output)
+                // Convert each character to a string in kebab case (either just the original character or an
+                //   underscore followed by the lowercase version of the original character)
                 .map(CdkHelper::charToKebab)
+                // Combine all of the strings into a single string to return
                 .fold("", (a1, a2) -> a1 + a2);
     }
 
