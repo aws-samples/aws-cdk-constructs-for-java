@@ -10,6 +10,7 @@ import io.vavr.collection.Map;
 import io.vavr.control.Option;
 import io.vavr.control.Try;
 import software.amazon.awscdk.core.App;
+import software.amazon.awscdk.core.Construct;
 
 import java.io.*;
 import java.math.BigInteger;
@@ -171,5 +172,9 @@ public class CdkHelper {
         }
 
         return className.substring(className.lastIndexOf(".") + 1);
+    }
+
+    public static Option<String> getContextVariable(Construct construct, String name) {
+        return Option.of((String) construct.getNode().tryGetContext(name));
     }
 }
