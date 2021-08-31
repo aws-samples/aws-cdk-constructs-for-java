@@ -28,7 +28,7 @@ public class CdkHelper {
     private static Map<String, String> arguments = HashMap.ofAll(Option.of(System.getenv()).getOrElse(java.util.HashMap::new));
 
     public static void setStackName(String stackName) {
-        if (!stackName.isEmpty()) {
+        if (stackNameOption.isDefined()) {
             throw new RuntimeException("Stack name already set [" + stackName + "]. It can not be changed.");
         }
 
