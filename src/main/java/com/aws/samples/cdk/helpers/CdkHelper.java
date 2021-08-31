@@ -153,7 +153,7 @@ public class CdkHelper {
             return String.valueOf(value);
         }
 
-        return "_" + Character.toLowerCase(value);
+        return "-" + Character.toLowerCase(value);
     }
 
     // Guidance from: https://stackoverflow.com/a/36949543/796579
