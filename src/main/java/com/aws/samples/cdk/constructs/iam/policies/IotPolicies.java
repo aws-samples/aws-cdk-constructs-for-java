@@ -1,9 +1,6 @@
 package com.aws.samples.cdk.constructs.iam.policies;
 
-import software.amazon.awscdk.services.iam.Effect;
-import software.amazon.awscdk.services.iam.PolicyStatement;
-import software.amazon.awscdk.services.iam.PolicyStatementProps;
-import software.amazon.awscdk.services.iam.ServicePrincipal;
+import software.amazon.awscdk.services.iam.*;
 
 import java.util.Collections;
 
@@ -12,6 +9,8 @@ import static com.aws.samples.cdk.constructs.iam.permissions.SharedPermissions.I
 
 public class IotPolicies {
     public static final ServicePrincipal IOT_SERVICE_PRINCIPAL = new ServicePrincipal("iot");
+    private static final String AWS_IOT_DATA_ACCESS_POLICY_NAME = "AWSIoTDataAccess";
+    public static final IManagedPolicy AWS_IOT_DATA_ACCESS_POLICY = ManagedPolicy.fromAwsManagedPolicyName(AWS_IOT_DATA_ACCESS_POLICY_NAME);
     private static final PolicyStatementProps SEARCH_INDEX_STATEMENT_PROPS = PolicyStatementProps.builder()
             .effect(Effect.ALLOW)
             .resources(Collections.singletonList(ALL_RESOURCES))
