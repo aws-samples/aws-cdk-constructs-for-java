@@ -68,7 +68,7 @@ dependencies {
     implementation("org.apache.logging.log4j:log4j-core:$log4jVersion")
     api("org.apache.logging.log4j:log4j-slf4j18-impl:$log4jVersion")
 
-    implementation("software.amazon.awscdk:core:$awsCdkVersion")
+    api("software.amazon.awscdk:core:$awsCdkVersion")
     api("software.amazon.awscdk:iam:$awsCdkVersion")
     api("software.amazon.awscdk:sqs:$awsCdkVersion")
     api("software.amazon.awscdk:iot:$awsCdkVersion")
