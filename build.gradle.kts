@@ -61,8 +61,8 @@ dependencies {
     // Immutables with JSON support
     annotationProcessor("org.immutables:value:$immutablesValueVersion")
     annotationProcessor("org.immutables:gson:$immutablesValueVersion")
-    implementation("org.immutables:value:$immutablesValueVersion")
-    implementation("org.immutables:gson:$immutablesValueVersion")
+    api("org.immutables:value:$immutablesValueVersion")
+    api("org.immutables:gson:$immutablesValueVersion")
 
     implementation("org.apache.logging.log4j:log4j-api:$log4jVersion")
     implementation("org.apache.logging.log4j:log4j-core:$log4jVersion")
@@ -75,7 +75,7 @@ dependencies {
     api("software.amazon.awscdk:lambda:$awsCdkVersion")
     api("software.amazon.awscdk:dynamodb:$awsCdkVersion")
     api("software.amazon.awscdk:apigateway:$awsCdkVersion")
-    implementation("software.amazon.awssdk:apache-client:$awsSdkVersion")
+    api("software.amazon.awssdk:apache-client:$awsSdkVersion")
     implementation("io.vavr:vavr:$vavrVersion")
     implementation("org.apache.commons:commons-lang3:$commonsLangVersion")
     implementation("commons-io:commons-io:$commonsIoVersion")
