@@ -37,7 +37,7 @@ val vavrVersion = "0.10.4"
 val commonsLangVersion = "3.12.0"
 val commonsIoVersion = "2.11.0"
 val ztZipVersion = "1.14"
-val resultsIteratorForAwsJavaSdkVersion = "29.0.18"
+val resultsIteratorForAwsJavaSdkVersion = "29.0.21"
 val junitVersion = "4.13.2"
 val autoServiceVersion = "1.0"
 val javaPoetVersion = "1.13.0"
@@ -84,7 +84,7 @@ dependencies {
     api("com.github.aws-samples:aws-lambda-servlet:$awsLambdaServletVersion")
 
     // For Gradle build support
-    implementation("org.gradle:gradle-tooling-api:$gradleToolingApiDependencyVersion")
+    api("org.gradle:gradle-tooling-api:$gradleToolingApiDependencyVersion")
 
     testImplementation("junit:junit:$junitVersion")
 }
