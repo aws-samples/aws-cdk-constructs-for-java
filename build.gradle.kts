@@ -17,7 +17,6 @@ publishing.publications.create<MavenPublication>("maven") {
 java.toolchain.languageVersion.set(JavaLanguageVersion.of(8))
 
 val gradleDependencyVersion = "7.2"
-val gradleToolingApiDependencyVersion = "7.1.1"
 
 tasks.wrapper {
     gradleVersion = gradleDependencyVersion
@@ -82,9 +81,6 @@ dependencies {
     implementation("com.github.awslabs:results-iterator-for-aws-java-sdk:$resultsIteratorForAwsJavaSdkVersion")
     implementation("com.amazonaws:aws-lambda-java-core:$awsLambdaJavaCoreVersion")
     api("com.github.aws-samples:aws-lambda-servlet:$awsLambdaServletVersion")
-
-    // For Gradle build support
-    api("org.gradle:gradle-tooling-api:$gradleToolingApiDependencyVersion")
 
     testImplementation("junit:junit:$junitVersion")
 }
