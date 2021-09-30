@@ -6,14 +6,14 @@ import software.amazon.awscdk.core.BundlingOutput;
 import software.amazon.awscdk.services.lambda.Runtime;
 import software.amazon.awscdk.services.s3.assets.AssetOptions;
 
-public class GradleAsset {
-    public static AssetOptions getAssetOptions(Runtime runtime, String projectDirectory, String outputJar) {
+public class PythonAsset {
+    public static AssetOptions getAssetOptions(Runtime runtime) {
         List<String> packagingCommandList = List.of(
                 "/bin/sh",
                 "-c",
                 String.join("&&",
-                        "./gradlew clean build",
-                        "cp /asset-input/" + projectDirectory + "/build/libs/" + outputJar + " /asset-output/"));
+                        "pip3 install -r requirements.txt -t .",
+                        "zip -r /asset-output/output.zip ."));
 
         BundlingOptions bundlingOptions = BundlingOptions.builder()
                 .command(packagingCommandList.asJava())
