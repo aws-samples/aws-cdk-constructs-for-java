@@ -1,13 +1,16 @@
 package com.aws.samples.cdk.assettypes;
 
 import io.vavr.collection.List;
+import io.vavr.control.Option;
 import software.amazon.awscdk.core.BundlingOptions;
 import software.amazon.awscdk.core.BundlingOutput;
 import software.amazon.awscdk.services.lambda.Runtime;
 import software.amazon.awscdk.services.s3.assets.AssetOptions;
 
 public class GradleAsset {
-    public static AssetOptions getAssetOptions(Runtime runtime, String outputJar) {
+    public static AssetOptions getAssetOptions(Runtime runtime, Option<String> outputJarOption) {
+        String outputJar = outputJarOption.getOrElse("asset-input-all.jar");
+
         List<String> packagingCommandList = List.of(
                 "/bin/sh",
                 "-c",
