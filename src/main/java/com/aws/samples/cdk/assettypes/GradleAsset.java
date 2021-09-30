@@ -12,7 +12,7 @@ public class GradleAsset {
                 "/bin/sh",
                 "-c",
                 String.join("&&",
-                        "./gradlew clean build",
+                        "./gradlew build",
                         "cp /build/libs/" + outputJar + " /asset-output/"));
 
         BundlingOptions bundlingOptions = BundlingOptions.builder()
