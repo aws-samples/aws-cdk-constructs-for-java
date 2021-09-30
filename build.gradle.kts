@@ -43,7 +43,6 @@ val javaPoetVersion = "1.13.0"
 val immutablesValueVersion = "2.8.9-ea-1"
 val awsLambdaJavaCoreVersion = "1.2.1"
 val awsLambdaServletVersion = "0.3.7"
-val log4jVersion = "2.14.1"
 
 repositories {
     mavenCentral()
@@ -62,10 +61,6 @@ dependencies {
     annotationProcessor("org.immutables:gson:$immutablesValueVersion")
     api("org.immutables:value:$immutablesValueVersion")
     api("org.immutables:gson:$immutablesValueVersion")
-
-    implementation("org.apache.logging.log4j:log4j-api:$log4jVersion")
-    implementation("org.apache.logging.log4j:log4j-core:$log4jVersion")
-    api("org.apache.logging.log4j:log4j-slf4j18-impl:$log4jVersion")
 
     api("software.amazon.awscdk:core:$awsCdkVersion")
     api("software.amazon.awscdk:iam:$awsCdkVersion")
