@@ -7,13 +7,13 @@ import software.amazon.awscdk.services.lambda.Runtime;
 import software.amazon.awscdk.services.s3.assets.AssetOptions;
 
 public class GradleAsset {
-    public static AssetOptions getAssetOptions(Runtime runtime, String projectDirectory, String outputJar) {
+    public static AssetOptions getAssetOptions(Runtime runtime, String outputJar) {
         List<String> packagingCommandList = List.of(
                 "/bin/sh",
                 "-c",
                 String.join("&&",
                         "./gradlew clean build",
-                        "cp /asset-input/" + projectDirectory + "/build/libs/" + outputJar + " /asset-output/"));
+                        "cp /build/libs/" + outputJar + " /asset-output/"));
 
         BundlingOptions bundlingOptions = BundlingOptions.builder()
                 .command(packagingCommandList.asJava())
