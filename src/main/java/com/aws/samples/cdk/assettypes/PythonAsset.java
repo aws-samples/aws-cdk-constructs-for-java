@@ -12,8 +12,14 @@ public class PythonAsset {
                 "/bin/sh",
                 "-c",
                 String.join("&&",
+                        "rm -rf temp-deployment",
+                        "mkdir temp-deployment",
+                        "cp -R * temp-deployment",
+                        "cd temp-deployment",
                         "pip3 install -r requirements.txt -t .",
-                        "zip -r /asset-output/output.zip ."));
+                        "zip -r /asset-output/output.zip .",
+                        "cd ..",
+                        "rm -rf temp-deployment"));
 
         BundlingOptions bundlingOptions = BundlingOptions.builder()
                 .command(packagingCommandList.asJava())
