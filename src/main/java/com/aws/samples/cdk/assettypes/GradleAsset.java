@@ -13,7 +13,7 @@ public class GradleAsset {
                 "-c",
                 String.join("&&",
                         "./gradlew build",
-                        "cp /build/libs/" + outputJar + " /asset-output/"));
+                        "cp build/libs/" + outputJar + " /asset-output/"));
 
         BundlingOptions bundlingOptions = BundlingOptions.builder()
                 .command(packagingCommandList.asJava())
