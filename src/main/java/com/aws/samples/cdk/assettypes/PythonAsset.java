@@ -13,7 +13,6 @@ public class PythonAsset {
                 "-c",
                 String.join("&&",
                         "rm -rf temp-deployment",
-                        "mkdir temp-deployment",
                         "cp -R * temp-deployment",
                         "cd temp-deployment",
                         "pip3 install -r requirements.txt -t .",
