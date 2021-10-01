@@ -15,13 +15,19 @@ public class PythonAsset {
                         "rm -rf temp-deployment",
                         "rm -f /asset-output/output.zip",
                         "zip -r /asset-output/output.zip .",
-                        "mkdir temp-deployment",
-                        // Conditionally try to install requirements.txt, not all functions will have one, must call true if this fails so CDK doesn't give up
-                        "(ls requirements.txt && pip3 install -r requirements.txt -t temp-deployment) || true",
-                        "cd temp-deployment",
-                        "zip -r /asset-output/output.zip .",
-                        "cd ..",
-                        "rm -rf temp-deployment"));
+                        // Conditionally try to install requirements.txt, not all functions will have one
+                        "(" + String.join("&& ",
+                                "ls requirements.txt",
+                                "mkdir temp-deployment",
+                                "pip3 install -r requirements.txt -t temp-deployment",
+                                "cd temp-deployment",
+                                "zip -r /asset-output/output.zip .",
+                                "cd ..",
+                                "rm -rf temp-deployment")
+                                // Call OR true to prevent a missing requirements.txt file from stopping CDK
+                                + ") || true"
+                )
+        );
 
         BundlingOptions bundlingOptions = BundlingOptions.builder()
                 .command(packagingCommandList.asJava())
