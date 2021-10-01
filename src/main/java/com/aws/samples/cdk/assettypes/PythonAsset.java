@@ -16,8 +16,8 @@ public class PythonAsset {
                         "rm -f /asset-output/output.zip",
                         "zip -r /asset-output/output.zip .",
                         "mkdir temp-deployment",
-                        // Conditionally try to install requirements.txt, not all functions will have one
-                        "(ls requirements.txt && pip3 install -r requirements.txt -t temp-deployment)",
+                        // Conditionally try to install requirements.txt, not all functions will have one, must call true if this fails so CDK doesn't give up
+                        "(ls requirements.txt && pip3 install -r requirements.txt -t temp-deployment) || true",
                         "cd temp-deployment",
                         "zip -r /asset-output/output.zip .",
                         "cd ..",
