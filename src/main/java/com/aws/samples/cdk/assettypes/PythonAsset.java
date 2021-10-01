@@ -16,7 +16,8 @@ public class PythonAsset {
                         "rm -f /asset-output/output.zip",
                         "zip -r /asset-output/output.zip .",
                         "mkdir temp-deployment",
-                        "pip3 install -r requirements.txt -t temp-deployment",
+                        // Conditionally try to install requirements.txt, not all functions will have one
+                        "(ls requirements.txt && pip3 install -r requirements.txt -t temp-deployment)",
                         "cd temp-deployment",
                         "zip -r /asset-output/output.zip .",
                         "cd ..",
