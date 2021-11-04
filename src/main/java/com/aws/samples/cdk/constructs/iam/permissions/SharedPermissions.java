@@ -56,6 +56,13 @@ public class SharedPermissions {
     private static final String SSM_PERMISSION_PREFIX = "ssm";
     public static final String SSM_DESCRIBE_INSTANCE_INFORMATION_PERMISSION = String.join(PERMISSION_DELIMITER, SSM_PERMISSION_PREFIX, "DescribeInstanceInformation");
     public static final String SSM_DESCRIBE_ACTIVATIONS_PERMISSION = String.join(PERMISSION_DELIMITER, SSM_PERMISSION_PREFIX, "DescribeActivations");
+    private static final String SQS_PERMISSION_PREFIX = "sqs";
+    public static final String SQS_CHANGE_MESSAGE_VISIBILITY = String.join(PERMISSION_DELIMITER, SQS_PERMISSION_PREFIX, "ChangeMessageVisibility");
+    public static final String SQS_DELETE_MESSAGE = String.join(PERMISSION_DELIMITER, SQS_PERMISSION_PREFIX, "DeleteMessage");
+    public static final String SQS_GET_QUEUE_ATTRIBUTES = String.join(PERMISSION_DELIMITER, SQS_PERMISSION_PREFIX, "GetQueueAttributes");
+    public static final String SQS_GET_QUEUE_URL = String.join(PERMISSION_DELIMITER, SQS_PERMISSION_PREFIX, "GetQueueUrl");
+    public static final String SQS_RECEIVE_MESSAGE = String.join(PERMISSION_DELIMITER, SQS_PERMISSION_PREFIX, "ReceiveMessage");
+    public static final String SQS_SEND_MESSAGE = String.join(PERMISSION_DELIMITER, SQS_PERMISSION_PREFIX, "SendMessage");
 
     private static Option<String> accountIdOption = Option.none();
 
