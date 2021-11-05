@@ -63,7 +63,7 @@ public class LambdaHelper {
         return buildLambda(stack, functionNamePrefix, role, defaultEnvironment, Code.fromAsset(assetName), handler, functionPropsBuilderOption);
     }
 
-    public static Function buildLambda(Stack stack, String functionNamePrefix, Role role, Map<String, String> defaultEnvironment, AssetCode assetCode, String handler, Option<FunctionProps.Builder> functionPropsBuilderOption) {
+    public static Function buildLambda(Stack stack, String functionNamePrefix, Role role, Map<String, String> defaultEnvironment, Code code, String handler, Option<FunctionProps.Builder> functionPropsBuilderOption) {
         FunctionProps.Builder functionPropsBuilder = FunctionProps.builder()
                 // Start out with the defaults
                 .environment(defaultEnvironment.toJavaMap())
@@ -99,7 +99,7 @@ public class LambdaHelper {
 
         // Populate the rest of the values that all functions need
         FunctionProps functionProps = functionPropsBuilder
-                .code(assetCode)
+                .code(code)
                 .handler(handler)
                 .role(role)
                 .tracing(Tracing.ACTIVE)
