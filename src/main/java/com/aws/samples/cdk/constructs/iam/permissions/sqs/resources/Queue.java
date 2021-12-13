@@ -27,4 +27,11 @@ public abstract class Queue implements SqsResource {
     public String getResourceValue() {
         return getQueueName();
     }
+
+    public static class Builder extends ImmutableQueue.Builder {
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
 }

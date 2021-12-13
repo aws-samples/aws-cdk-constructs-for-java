@@ -30,4 +30,11 @@ public abstract class DeleteMessage implements IamPermission {
 
         return Tuple.of(iamAction, iamAction.getIamResource());
     }
+
+    public static class Builder extends ImmutableDeleteMessage.Builder {
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
 }

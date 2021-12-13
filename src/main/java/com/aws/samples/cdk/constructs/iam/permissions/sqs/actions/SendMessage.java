@@ -30,4 +30,11 @@ public abstract class SendMessage implements IamPermission {
 
         return Tuple.of(iamAction, iamAction.getIamResource());
     }
+
+    public static class Builder extends ImmutableSendMessage.Builder {
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
 }

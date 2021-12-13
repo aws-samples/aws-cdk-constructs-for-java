@@ -1,5 +1,6 @@
 package com.aws.samples.cdk.constructs.autowired.cloudformation;
 
+import com.aws.samples.cdk.constructs.iam.permissions.sqs.actions.GetQueueUrl;
 import com.google.gson.annotations.SerializedName;
 import org.immutables.gson.Gson;
 import org.immutables.value.Value;
@@ -33,4 +34,11 @@ public abstract class CustomResourceRequest {
 
     @SerializedName("ResourceType")
     public abstract String getResourceType();
+
+    public static class Builder extends ImmutableCustomResourceRequest.Builder {
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
 }

@@ -1,5 +1,6 @@
 package com.aws.samples.cdk.constructs.iam.permissions.kinesisfirehose.resources;
 
+import com.aws.samples.cdk.constructs.iam.permissions.sqs.actions.GetQueueUrl;
 import org.immutables.gson.Gson;
 import org.immutables.value.Value;
 
@@ -16,5 +17,12 @@ public abstract class KinesisFirehoseStream implements KinesisFirehoseResource {
     @Override
     public String getResourceValue() {
         return getName();
+    }
+
+    public static class Builder extends ImmutableKinesisFirehoseStream.Builder {
+    }
+
+    public static Builder builder() {
+        return new Builder();
     }
 }

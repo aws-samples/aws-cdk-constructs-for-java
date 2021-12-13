@@ -1,5 +1,6 @@
 package com.aws.samples.cdk.constructs.iam.permissions.lambda.resources;
 
+import com.aws.samples.cdk.constructs.iam.permissions.sqs.actions.GetQueueUrl;
 import org.immutables.gson.Gson;
 import org.immutables.value.Value;
 
@@ -16,5 +17,12 @@ public abstract class Function implements LambdaResource {
     @Override
     public String getResourceValue() {
         return getFunctionName();
+    }
+
+    public static class Builder extends ImmutableFunction.Builder {
+    }
+
+    public static Builder builder() {
+        return new Builder();
     }
 }

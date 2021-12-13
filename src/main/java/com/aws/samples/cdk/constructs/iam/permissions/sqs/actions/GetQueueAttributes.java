@@ -30,4 +30,11 @@ public abstract class GetQueueAttributes implements IamPermission {
 
         return Tuple.of(iamAction, iamAction.getIamResource());
     }
+
+    public static class Builder extends ImmutableGetQueueAttributes.Builder {
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
 }

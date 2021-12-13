@@ -5,6 +5,7 @@ import com.aws.samples.cdk.constructs.iam.permissions.IamPermission;
 import com.aws.samples.cdk.constructs.iam.permissions.IamResource;
 import com.aws.samples.cdk.constructs.iam.permissions.SharedPermissions;
 import com.aws.samples.cdk.constructs.iam.permissions.lambda.resources.LambdaAllResources;
+import com.aws.samples.cdk.constructs.iam.permissions.sqs.actions.GetQueueUrl;
 import io.vavr.Tuple;
 import io.vavr.Tuple2;
 import org.immutables.gson.Gson;
@@ -28,5 +29,12 @@ public abstract class InvokeAll implements IamPermission {
         };
 
         return Tuple.of(iamAction, iamAction.getIamResource());
+    }
+
+    public static class Builder extends ImmutableInvokeAll.Builder {
+    }
+
+    public static Builder builder() {
+        return new Builder();
     }
 }

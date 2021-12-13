@@ -30,4 +30,11 @@ public abstract class ChangeMessageVisibility implements IamPermission {
 
         return Tuple.of(iamAction, iamAction.getIamResource());
     }
+
+    public static class Builder extends ImmutableChangeMessageVisibility.Builder {
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
 }

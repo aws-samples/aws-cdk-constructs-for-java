@@ -1,5 +1,6 @@
 package com.aws.samples.cdk.constructs.iam.permissions.iot.dataplane.resources;
 
+import com.aws.samples.cdk.constructs.iam.permissions.sqs.actions.GetQueueUrl;
 import org.immutables.gson.Gson;
 import org.immutables.value.Value;
 
@@ -16,5 +17,12 @@ public abstract class TopicFilter implements IotResource {
     @Override
     public String getResourceValue() {
         return getTopicFilter();
+    }
+
+    public static class Builder extends ImmutableTopicFilter.Builder {
+    }
+
+    public static Builder builder() {
+        return new Builder();
     }
 }

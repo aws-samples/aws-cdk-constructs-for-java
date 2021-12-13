@@ -1,7 +1,7 @@
 package com.aws.samples.cdk.constructs.iam.permissions.iot.dataplane.actions;
 
-import com.aws.samples.cdk.constructs.iam.permissions.iot.dataplane.resources.TopicFilter;
 import com.aws.samples.cdk.constructs.iam.permissions.iot.dataplane.resources.IotResource;
+import com.aws.samples.cdk.constructs.iam.permissions.iot.dataplane.resources.TopicFilter;
 import org.immutables.gson.Gson;
 import org.immutables.value.Value;
 
@@ -20,5 +20,12 @@ public abstract class Subscribe implements IotDataPlaneAction {
     @Override
     public IotResource getResource() {
         return getTopicFilter();
+    }
+
+    public static class Builder extends ImmutableSubscribe.Builder {
+    }
+
+    public static Builder builder() {
+        return new Builder();
     }
 }

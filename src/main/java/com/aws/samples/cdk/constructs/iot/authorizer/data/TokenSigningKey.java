@@ -24,4 +24,11 @@ public abstract class TokenSigningKey {
                 // Convert the bytes to a string OR just return the existing string
                 .fold(String::new, Function.identity());
     }
+
+    public static class Builder extends ImmutableTokenSigningKey.Builder {
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
 }

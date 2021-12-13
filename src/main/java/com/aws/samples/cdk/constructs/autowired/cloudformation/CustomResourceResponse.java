@@ -1,6 +1,7 @@
 package com.aws.samples.cdk.constructs.autowired.cloudformation;
 
 import com.amazonaws.services.lambda.runtime.Context;
+import com.aws.samples.cdk.constructs.iam.permissions.sqs.actions.GetQueueUrl;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.gson.annotations.SerializedName;
 import org.immutables.gson.Gson;
@@ -69,5 +70,12 @@ public abstract class CustomResourceResponse {
 
     private String getLogStreamNameAsDefault() {
         return getContext().getLogStreamName();
+    }
+
+    public static class Builder extends ImmutableCustomResourceResponse.Builder {
+    }
+
+    public static Builder builder() {
+        return new Builder();
     }
 }

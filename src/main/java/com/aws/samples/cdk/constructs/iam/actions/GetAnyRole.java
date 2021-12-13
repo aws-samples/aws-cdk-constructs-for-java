@@ -4,6 +4,7 @@ import com.aws.samples.cdk.constructs.iam.permissions.IamAction;
 import com.aws.samples.cdk.constructs.iam.permissions.IamPermission;
 import com.aws.samples.cdk.constructs.iam.permissions.IamResource;
 import com.aws.samples.cdk.constructs.iam.permissions.SharedPermissions;
+import com.aws.samples.cdk.constructs.iam.permissions.sqs.actions.GetQueueUrl;
 import com.aws.samples.cdk.constructs.iam.resources.IamAllResources;
 import io.vavr.Tuple;
 import io.vavr.Tuple2;
@@ -28,5 +29,12 @@ public class GetAnyRole implements IamPermission {
         };
 
         return Tuple.of(iamAction, iamAction.getIamResource());
+    }
+
+    public static class Builder extends ImmutableGetAnyRole.Builder {
+    }
+
+    public static Builder builder() {
+        return new Builder();
     }
 }

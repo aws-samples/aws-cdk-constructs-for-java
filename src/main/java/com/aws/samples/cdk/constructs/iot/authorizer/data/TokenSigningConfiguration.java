@@ -1,5 +1,6 @@
 package com.aws.samples.cdk.constructs.iot.authorizer.data;
 
+import com.aws.samples.cdk.constructs.iam.permissions.sqs.actions.GetQueueUrl;
 import io.vavr.collection.List;
 import org.immutables.gson.Gson;
 import org.immutables.value.Value;
@@ -17,5 +18,12 @@ public abstract class TokenSigningConfiguration {
     public Map<String, String> getMap() {
         return getTokenSigningKeys()
                 .collect(Collectors.toMap(TokenSigningKey::getName, TokenSigningKey::getKey));
+    }
+
+    public static class Builder extends ImmutableTokenSigningConfiguration.Builder {
+    }
+
+    public static Builder builder() {
+        return new Builder();
     }
 }
