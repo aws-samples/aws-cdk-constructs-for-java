@@ -73,7 +73,7 @@ public abstract class CustomResourceFunction implements RequestStreamHandler, Ha
      * @param data
      * @return
      */
-    protected CustomResourceResponse simpleDeleteSuccess(CustomResourceRequest customResourceRequest, Context context, Map data) {
+    protected CustomResourceResponse simpleDeleteSuccess(CustomResourceRequest customResourceRequest, Context context, Map<String, Object> data) {
         ImmutableCustomResourceResponse.Builder builder = ImmutableCustomResourceResponse.builder()
                 .customResourceRequest(customResourceRequest)
                 .context(context)
@@ -99,7 +99,7 @@ public abstract class CustomResourceFunction implements RequestStreamHandler, Ha
      * @param data
      * @return
      */
-    protected CustomResourceResponse simpleCreateOrUpdateSuccess(CustomResourceRequest customResourceRequest, Context context, String newPhysicalResourceId, Map data) {
+    protected CustomResourceResponse simpleCreateOrUpdateSuccess(CustomResourceRequest customResourceRequest, Context context, String newPhysicalResourceId, Map<String, Object> data) {
         ImmutableCustomResourceResponse.Builder builder = ImmutableCustomResourceResponse.builder()
                 .customResourceRequest(customResourceRequest)
                 .context(context)

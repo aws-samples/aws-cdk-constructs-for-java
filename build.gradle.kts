@@ -23,6 +23,10 @@ tasks.wrapper {
     distributionType = Wrapper.DistributionType.ALL
 }
 
+tasks.compileJava {
+    options.compilerArgs.add("-Xlint:unchecked")
+}
+
 tasks.distZip { enabled = true }
 tasks.distTar { enabled = true }
 

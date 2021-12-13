@@ -56,8 +56,8 @@ public abstract class CustomResourceResponse {
 
     @Value.Default
     @SerializedName("Data")
-    public Map getData() {
-        return new HashMap();
+    public Map<String, Object> getData() {
+        return new HashMap<>();
     }
 
     // Used to get the original request to the sender, must not be serialized with the response

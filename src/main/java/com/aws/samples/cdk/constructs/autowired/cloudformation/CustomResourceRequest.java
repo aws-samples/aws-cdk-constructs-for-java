@@ -12,7 +12,7 @@ import java.util.Optional;
 @Value.Immutable
 public abstract class CustomResourceRequest {
     @SerializedName("ResourceProperties")
-    public abstract Map getResourceProperties();
+    public abstract Map<String, Object> getResourceProperties();
 
     @SerializedName("RequestType")
     public abstract String getRequestType();
