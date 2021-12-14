@@ -12,6 +12,10 @@ import java.util.function.Function;
 @Gson.TypeAdapters
 @Value.Immutable
 public abstract class TokenSigningKey {
+    public static Builder builder() {
+        return new Builder();
+    }
+
     public abstract String getName();
 
     public abstract Either<File, String> getRawKey();
@@ -26,9 +30,5 @@ public abstract class TokenSigningKey {
     }
 
     public static class Builder extends ImmutableTokenSigningKey.Builder {
-    }
-
-    public static Builder builder() {
-        return new Builder();
     }
 }

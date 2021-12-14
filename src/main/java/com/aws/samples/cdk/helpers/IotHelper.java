@@ -1,8 +1,9 @@
 package com.aws.samples.cdk.helpers;
 
-import com.aws.samples.cdk.constructs.iam.permissions.SharedPermissions;
 import com.aws.samples.cdk.constructs.autowired.iot.IotCustomAuthorizer;
+import com.aws.samples.cdk.constructs.iam.permissions.SharedPermissions;
 import com.aws.samples.cdk.constructs.iot.authorizer.data.TokenSigningConfiguration;
+import io.vavr.collection.List;
 import io.vavr.control.Option;
 import io.vavr.control.Try;
 import org.jetbrains.annotations.NotNull;
@@ -20,7 +21,6 @@ import software.amazon.awscdk.services.lambda.*;
 
 import java.io.File;
 import java.util.Arrays;
-import io.vavr.collection.List;
 import java.util.Map;
 
 import static com.aws.samples.cdk.constructs.iam.permissions.SharedPermissions.*;
@@ -40,6 +40,18 @@ public class IotHelper {
     public static final PolicyStatement createThingGroupPolicyStatement = getAllowAllPolicyStatement(IOT_CREATE_THING_GROUP_PERMISSION);
     public static final PolicyStatement updateThingGroupsForThingPolicyStatement = getAllowAllPolicyStatement(IOT_UPDATE_THING_GROUPS_FOR_THING_PERMISSION);
     public static final PolicyStatement updateThingShadowPolicyStatement = getAllowAllPolicyStatement(IOT_UPDATE_THING_SHADOW_PERMISSION);
+    private static final PolicyStatementProps describeEndpointPolicyStatementProps = PolicyStatementProps.builder()
+            .effect(Effect.ALLOW)
+            .resources(singletonList(ALL_RESOURCES))
+            .actions(singletonList(IOT_DESCRIBE_ENDPOINT_PERMISSION))
+            .build();
+    public static final PolicyStatement DESCRIBE_ENDPOINT_POLICY_STATEMENT = new PolicyStatement(describeEndpointPolicyStatementProps);
+    private static final PolicyStatementProps connectAllPolicyStatementProps = PolicyStatementProps.builder()
+            .effect(Effect.ALLOW)
+            .resources(singletonList(ALL_RESOURCES))
+            .actions(singletonList(IOT_CONNECT_PERMISSION))
+            .build();
+    public static final PolicyStatement connectAllPolicyStatement = new PolicyStatement(connectAllPolicyStatementProps);
 
     public static CfnPermission allowIotTopicRuleToInvokeLambdaFunction(Stack stack, CfnTopicRule topicRule, Function function, String permissionNamePrefix) {
         String iotServicePrincipal = Fn.join(".", Arrays.asList("iot", stack.getUrlSuffix()));
@@ -82,14 +94,6 @@ public class IotHelper {
         return new PolicyStatement(iotPolicyStatementProps);
     }
 
-    private static final PolicyStatementProps describeEndpointPolicyStatementProps = PolicyStatementProps.builder()
-            .effect(Effect.ALLOW)
-            .resources(singletonList(ALL_RESOURCES))
-            .actions(singletonList(IOT_DESCRIBE_ENDPOINT_PERMISSION))
-            .build();
-
-    public static final PolicyStatement DESCRIBE_ENDPOINT_POLICY_STATEMENT = new PolicyStatement(describeEndpointPolicyStatementProps);
-
     @NotNull
     public static PolicyStatement getPublishToTopicPrefixPolicyStatement(Stack stack, String topicPrefix) {
         PolicyStatementProps iotPolicyStatementProps = PolicyStatementProps.builder()
@@ -119,13 +123,6 @@ public class IotHelper {
                 .build();
         return new PolicyStatement(iotPolicyStatementProps);
     }
-
-    private static final PolicyStatementProps connectAllPolicyStatementProps = PolicyStatementProps.builder()
-            .effect(Effect.ALLOW)
-            .resources(singletonList(ALL_RESOURCES))
-            .actions(singletonList(IOT_CONNECT_PERMISSION))
-            .build();
-    public static final PolicyStatement connectAllPolicyStatement = new PolicyStatement(connectAllPolicyStatementProps);
 
     @NotNull
     public static PolicyStatement getConnectPolicyStatement(Stack stack, String clientId) {

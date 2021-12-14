@@ -13,6 +13,10 @@ import org.immutables.value.Value;
 @Gson.TypeAdapters
 @Value.Immutable
 public abstract class Invoke implements IamPermission {
+    public static Builder builder() {
+        return new Builder();
+    }
+
     public abstract Function getFunction();
 
     @Override
@@ -33,9 +37,5 @@ public abstract class Invoke implements IamPermission {
     }
 
     public static class Builder extends ImmutableInvoke.Builder {
-    }
-
-    public static Builder builder() {
-        return new Builder();
     }
 }

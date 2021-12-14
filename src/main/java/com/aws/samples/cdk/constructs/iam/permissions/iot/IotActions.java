@@ -6,23 +6,23 @@ import com.aws.samples.cdk.constructs.iam.permissions.iot.dataplane.resources.To
 import com.aws.samples.cdk.constructs.iam.permissions.iot.dataplane.resources.TopicFilter;
 
 public class IotActions {
-    public static DescribeEndpoint describeEndpoint = ImmutableDescribeEndpoint.builder().build();
+    public static DescribeEndpoint describeEndpoint = DescribeEndpoint.builder().build();
 
-    public static SearchIndex searchIndex = ImmutableSearchIndex.builder().build();
+    public static SearchIndex searchIndex = SearchIndex.builder().build();
 
     public static Publish publish(Topic topic) {
-        return ImmutablePublish.builder().topic(topic).build();
+        return Publish.builder().topic(topic).build();
     }
 
     public static Receive receive(Topic topic) {
-        return ImmutableReceive.builder().topic(topic).build();
+        return Receive.builder().topic(topic).build();
     }
 
     public static Subscribe subscribe(TopicFilter topicFilter) {
-        return ImmutableSubscribe.builder().topicFilter(topicFilter).build();
+        return Subscribe.builder().topicFilter(topicFilter).build();
     }
 
     public static Connect connect(ClientId clientId) {
-        return ImmutableConnect.builder().clientId(clientId).build();
+        return Connect.builder().clientId(clientId).build();
     }
 }

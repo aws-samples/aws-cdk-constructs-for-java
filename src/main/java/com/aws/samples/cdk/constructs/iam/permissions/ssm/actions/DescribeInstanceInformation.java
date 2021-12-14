@@ -4,7 +4,6 @@ import com.aws.samples.cdk.constructs.iam.permissions.IamAction;
 import com.aws.samples.cdk.constructs.iam.permissions.IamPermission;
 import com.aws.samples.cdk.constructs.iam.permissions.IamResource;
 import com.aws.samples.cdk.constructs.iam.permissions.SharedPermissions;
-import com.aws.samples.cdk.constructs.iam.permissions.sqs.actions.GetQueueUrl;
 import com.aws.samples.cdk.constructs.iam.permissions.ssm.resources.SsmAllResources;
 import io.vavr.Tuple;
 import io.vavr.Tuple2;
@@ -14,6 +13,10 @@ import org.immutables.value.Value;
 @Gson.TypeAdapters
 @Value.Immutable
 public abstract class DescribeInstanceInformation implements IamPermission {
+    public static Builder builder() {
+        return new Builder();
+    }
+
     @Override
     public Tuple2<IamAction, IamResource> getActionAndResource() {
         IamAction iamAction = new IamAction() {
@@ -32,9 +35,5 @@ public abstract class DescribeInstanceInformation implements IamPermission {
     }
 
     public static class Builder extends ImmutableDescribeInstanceInformation.Builder {
-    }
-
-    public static Builder builder() {
-        return new Builder();
     }
 }

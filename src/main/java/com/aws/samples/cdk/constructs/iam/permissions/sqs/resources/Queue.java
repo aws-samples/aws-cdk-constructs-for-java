@@ -6,6 +6,10 @@ import org.immutables.value.Value;
 @Gson.TypeAdapters
 @Value.Immutable
 public abstract class Queue implements SqsResource {
+    public static Builder builder() {
+        return new Builder();
+    }
+
     public abstract String getQueueName();
 
     /**
@@ -29,9 +33,5 @@ public abstract class Queue implements SqsResource {
     }
 
     public static class Builder extends ImmutableQueue.Builder {
-    }
-
-    public static Builder builder() {
-        return new Builder();
     }
 }

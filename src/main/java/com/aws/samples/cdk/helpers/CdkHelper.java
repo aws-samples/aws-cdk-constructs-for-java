@@ -24,17 +24,10 @@ import java.util.zip.ZipEntry;
 
 public class CdkHelper {
     public static final String NO_SEPARATOR = "";
+    private static final Lazy<App> lazyApp = Lazy.of(App::new);
     private static Option<String> stackNameOption = Option.none();
-    private static Lazy<Random> lazyRandom = Lazy.of(() -> new Random(UUID.nameUUIDFromBytes(CdkHelper.getStackName().getBytes()).getLeastSignificantBits()));
-    private static Map<String, String> arguments = HashMap.ofAll(Option.of(System.getenv()).getOrElse(java.util.HashMap::new));
-
-    public static void setStackName(String stackName) {
-        if (stackNameOption.isDefined()) {
-            throw new RuntimeException("Stack name already set [" + stackName + "]. It can not be changed.");
-        }
-
-        CdkHelper.stackNameOption = Option.of(stackName);
-    }
+    private static final Lazy<Random> lazyRandom = Lazy.of(() -> new Random(UUID.nameUUIDFromBytes(CdkHelper.getStackName().getBytes()).getLeastSignificantBits()));
+    private static final Map<String, String> arguments = HashMap.ofAll(Option.of(System.getenv()).getOrElse(java.util.HashMap::new));
 
     public static String getStackName() {
         if (stackNameOption.isEmpty()) {
@@ -44,7 +37,13 @@ public class CdkHelper {
         return stackNameOption.get();
     }
 
-    private static final Lazy<App> lazyApp = Lazy.of(App::new);
+    public static void setStackName(String stackName) {
+        if (stackNameOption.isDefined()) {
+            throw new RuntimeException("Stack name already set [" + stackName + "]. It can not be changed.");
+        }
+
+        CdkHelper.stackNameOption = Option.of(stackName);
+    }
 
     public static App getApp() {
         return lazyApp.get();

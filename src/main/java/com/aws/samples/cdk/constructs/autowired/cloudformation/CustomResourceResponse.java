@@ -1,7 +1,6 @@
 package com.aws.samples.cdk.constructs.autowired.cloudformation;
 
 import com.amazonaws.services.lambda.runtime.Context;
-import com.aws.samples.cdk.constructs.iam.permissions.sqs.actions.GetQueueUrl;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.gson.annotations.SerializedName;
 import org.immutables.gson.Gson;
@@ -13,6 +12,10 @@ import java.util.Map;
 @Gson.TypeAdapters
 @Value.Immutable
 public abstract class CustomResourceResponse {
+    public static Builder builder() {
+        return new Builder();
+    }
+
     @Value.Default
     @SerializedName("StackId")
     public String getStackId() {
@@ -73,9 +76,5 @@ public abstract class CustomResourceResponse {
     }
 
     public static class Builder extends ImmutableCustomResourceResponse.Builder {
-    }
-
-    public static Builder builder() {
-        return new Builder();
     }
 }

@@ -10,6 +10,10 @@ import static com.aws.samples.cdk.constructs.iam.permissions.SharedPermissions.I
 @Gson.TypeAdapters
 @Value.Immutable
 public abstract class Subscribe implements IotDataPlaneAction {
+    public static Builder builder() {
+        return new Builder();
+    }
+
     public abstract TopicFilter getTopicFilter();
 
     @Override
@@ -23,9 +27,5 @@ public abstract class Subscribe implements IotDataPlaneAction {
     }
 
     public static class Builder extends ImmutableSubscribe.Builder {
-    }
-
-    public static Builder builder() {
-        return new Builder();
     }
 }

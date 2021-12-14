@@ -18,8 +18,8 @@ import java.net.URLClassLoader;
 import java.util.jar.JarFile;
 
 public class ReflectionHelper {
-    private static final Logger log = LoggerFactory.getLogger(ReflectionHelper.class);
     public static final String HANDLE_REQUEST = "handleRequest";
+    private static final Logger log = LoggerFactory.getLogger(ReflectionHelper.class);
 
     public static <T> List<Class<T>> findClassesInJarImplementingInterface(File file, Class<T> interfaceClass) {
         return CdkHelper.getCdkAutoWiredClassList(file)

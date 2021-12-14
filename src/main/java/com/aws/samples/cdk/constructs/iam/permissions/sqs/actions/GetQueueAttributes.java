@@ -12,6 +12,10 @@ import org.immutables.value.Value;
 @Gson.TypeAdapters
 @Value.Immutable
 public abstract class GetQueueAttributes implements IamPermission {
+    public static Builder builder() {
+        return new Builder();
+    }
+
     public abstract IamResource getQueue();
 
     @Override
@@ -32,9 +36,5 @@ public abstract class GetQueueAttributes implements IamPermission {
     }
 
     public static class Builder extends ImmutableGetQueueAttributes.Builder {
-    }
-
-    public static Builder builder() {
-        return new Builder();
     }
 }

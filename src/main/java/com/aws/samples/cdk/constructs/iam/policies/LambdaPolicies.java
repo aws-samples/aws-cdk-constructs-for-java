@@ -1,13 +1,12 @@
 package com.aws.samples.cdk.constructs.iam.policies;
 
+import io.vavr.collection.List;
 import software.amazon.awscdk.services.iam.Effect;
 import software.amazon.awscdk.services.iam.PolicyStatement;
 import software.amazon.awscdk.services.iam.PolicyStatementProps;
 import software.amazon.awscdk.services.iam.ServicePrincipal;
 
-import java.util.Arrays;
 import java.util.Collections;
-import io.vavr.collection.List;
 
 public class LambdaPolicies {
     public static final ServicePrincipal LAMBDA_SERVICE_PRINCIPAL = new ServicePrincipal("lambda");

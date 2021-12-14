@@ -13,6 +13,10 @@ import org.immutables.value.Value;
 @Gson.TypeAdapters
 @Value.Immutable
 public class GetFederationToken implements IamPermission {
+    public static Builder builder() {
+        return new Builder();
+    }
+
     @Override
     public Tuple2<IamAction, IamResource> getActionAndResource() {
         IamAction iamAction = new IamAction() {
@@ -31,9 +35,5 @@ public class GetFederationToken implements IamPermission {
     }
 
     public static class Builder extends ImmutableGetFederationToken.Builder {
-    }
-
-    public static Builder builder() {
-        return new Builder();
     }
 }

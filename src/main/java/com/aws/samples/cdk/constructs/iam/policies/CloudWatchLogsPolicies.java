@@ -1,12 +1,9 @@
 package com.aws.samples.cdk.constructs.iam.policies;
 
+import io.vavr.collection.List;
 import software.amazon.awscdk.services.iam.Effect;
 import software.amazon.awscdk.services.iam.PolicyStatement;
 import software.amazon.awscdk.services.iam.PolicyStatementProps;
-
-import java.util.Arrays;
-import java.util.Collections;
-import io.vavr.collection.List;
 
 import static com.aws.samples.cdk.constructs.iam.permissions.SharedPermissions.*;
 

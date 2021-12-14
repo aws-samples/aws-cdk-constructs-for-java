@@ -1,6 +1,5 @@
 package com.aws.samples.cdk.constructs.iot.authorizer.data;
 
-import com.aws.samples.cdk.constructs.iam.permissions.sqs.actions.GetQueueUrl;
 import io.vavr.collection.List;
 import org.immutables.gson.Gson;
 import org.immutables.value.Value;
@@ -11,6 +10,10 @@ import java.util.stream.Collectors;
 @Gson.TypeAdapters
 @Value.Immutable
 public abstract class TokenSigningConfiguration {
+    public static Builder builder() {
+        return new Builder();
+    }
+
     public abstract List<TokenSigningKey> getTokenSigningKeys();
 
     public abstract String getTokenKeyName();
@@ -21,9 +24,5 @@ public abstract class TokenSigningConfiguration {
     }
 
     public static class Builder extends ImmutableTokenSigningConfiguration.Builder {
-    }
-
-    public static Builder builder() {
-        return new Builder();
     }
 }

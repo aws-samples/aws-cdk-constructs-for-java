@@ -47,7 +47,7 @@ public abstract class CustomResourceFunction implements RequestStreamHandler, Ha
     }
 
     private Try<CustomResourceResponse> createFailureResponse(Throwable throwable, CustomResourceRequest customResourceRequest, Context context) {
-        return Try.of(() -> ImmutableCustomResourceResponse.builder()
+        return Try.of(() -> CustomResourceResponse.builder()
                 .customResourceRequest(customResourceRequest)
                 .context(context)
                 .status(CustomResourceStatus.FAILED)
@@ -74,7 +74,7 @@ public abstract class CustomResourceFunction implements RequestStreamHandler, Ha
      * @return
      */
     protected CustomResourceResponse simpleDeleteSuccess(CustomResourceRequest customResourceRequest, Context context, Map<String, Object> data) {
-        ImmutableCustomResourceResponse.Builder builder = ImmutableCustomResourceResponse.builder()
+        CustomResourceResponse.Builder builder = CustomResourceResponse.builder()
                 .customResourceRequest(customResourceRequest)
                 .context(context)
                 .status(CustomResourceStatus.SUCCESS)
@@ -100,7 +100,7 @@ public abstract class CustomResourceFunction implements RequestStreamHandler, Ha
      * @return
      */
     protected CustomResourceResponse simpleCreateOrUpdateSuccess(CustomResourceRequest customResourceRequest, Context context, String newPhysicalResourceId, Map<String, Object> data) {
-        ImmutableCustomResourceResponse.Builder builder = ImmutableCustomResourceResponse.builder()
+        CustomResourceResponse.Builder builder = CustomResourceResponse.builder()
                 .customResourceRequest(customResourceRequest)
                 .context(context)
                 .status(CustomResourceStatus.SUCCESS)

@@ -5,7 +5,6 @@ import com.aws.samples.cdk.constructs.iam.permissions.IamPermission;
 import com.aws.samples.cdk.constructs.iam.permissions.IamResource;
 import com.aws.samples.cdk.constructs.iam.permissions.SharedPermissions;
 import com.aws.samples.cdk.constructs.iam.permissions.iot.dataplane.resources.IotAllResources;
-import com.aws.samples.cdk.constructs.iam.permissions.sqs.actions.GetQueueUrl;
 import io.vavr.Tuple;
 import io.vavr.Tuple2;
 import org.immutables.gson.Gson;
@@ -14,6 +13,10 @@ import org.immutables.value.Value;
 @Gson.TypeAdapters
 @Value.Immutable
 public abstract class SearchIndex implements IamPermission {
+    public static Builder builder() {
+        return new Builder();
+    }
+
     @Override
     public Tuple2<IamAction, IamResource> getActionAndResource() {
         IamAction iamAction = new IamAction() {
@@ -32,9 +35,5 @@ public abstract class SearchIndex implements IamPermission {
     }
 
     public static class Builder extends ImmutableSearchIndex.Builder {
-    }
-
-    public static Builder builder() {
-        return new Builder();
     }
 }
