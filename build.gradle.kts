@@ -44,7 +44,7 @@ val resultsIteratorForAwsJavaSdkVersion = "29.0.23"
 val junitVersion = "4.13.2"
 val autoServiceVersion = "1.0.1"
 val javaPoetVersion = "1.13.0"
-val immutablesValueVersion = "2.8.9-ea-1"
+val immutablesValueVersion = "2.9.0"
 val awsLambdaJavaCoreVersion = "1.2.1"
 val awsLambdaServletVersion = "0.3.8"
 
