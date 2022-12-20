@@ -35,7 +35,7 @@ version = "1.0-SNAPSHOT"
 
 // Specify all of our dependency versions
 val awsCdkVersion = "1.156.1"
-val awsSdkVersion = "2.17.191"
+val awsSdkVersion = "2.19.0"
 val vavrVersion = "0.10.4"
 val commonsLangVersion = "3.12.0"
 val commonsIoVersion = "2.11.0"
