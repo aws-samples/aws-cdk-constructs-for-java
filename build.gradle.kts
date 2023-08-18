@@ -45,7 +45,7 @@ val junitVersion = "4.13.2"
 val autoServiceVersion = "1.0.1"
 val javaPoetVersion = "1.13.0"
 val immutablesValueVersion = "2.9.0"
-val awsLambdaJavaCoreVersion = "1.2.1"
+val awsLambdaJavaCoreVersion = "1.2.3"
 val awsLambdaServletVersion = "0.3.8"
 
 repositories {
